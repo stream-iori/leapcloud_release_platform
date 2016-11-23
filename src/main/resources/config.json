@@ -1,0 +1,15 @@
+{
+  "mysql": {
+    "url": "${config.mysql.jdbc.url}",
+    "user": "${config.mysql.jdbc.user}",
+    "password": "${config.mysql.jdbc.password}"
+  },
+  "rds": {
+    "user": "${config.rds.user}",
+    "password": "${config.rds.password}",
+    "maxLeapDefaultPassword": "${config.rds.maxLeapDefaultPassword}"
+  },
+  "busAddress" : "${config.busAddress}",
+  "httpPort" : "${config.httpPort}",
+  "port" : "${config.port}"
+}

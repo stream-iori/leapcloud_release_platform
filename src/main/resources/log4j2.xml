@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+  <Appenders>
+    <RollingFile name="RollingFile" fileName="/opt/service/release_platform/logs/release_platform.log" filePattern="/opt/service/release_platform/logs/release_platform.%i">
+      <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss:SSS} - %p - %l - %t - %m%n"/>
+      <DefaultRolloverStrategy max="16"/>
+      <Policies>
+        <SizeBasedTriggeringPolicy size="10 MB"/>
+      </Policies>
+    </RollingFile>
+
+    <Console name="Console">
+      <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss:SSS} - %p - %l - %t - %m%n"/>
+    </Console>
+  </Appenders>
+
+  <Loggers>
+    <Root level="INFO">
+      ${config.log4j2.appenderRefs}
+    </Root>
+  </Loggers>
+</Configuration>
