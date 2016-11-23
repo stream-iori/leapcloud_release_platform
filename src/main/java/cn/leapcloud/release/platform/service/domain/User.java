@@ -9,21 +9,15 @@ public class User {
   private final String name;
   private final String email;
 
-  public User(int id, String name, String email) {
-    this.id = id;
-    this.name = name;
-    this.email = email;
-  }
-
-  public int id() {
+  public int getId() {
     return id;
   }
 
-  public String name() {
+  public String getName() {
     return name;
   }
 
-  public String email() {
+  public String getEmail() {
     return email;
   }
 
@@ -37,29 +31,33 @@ public class User {
   }
 
   public static final class Builder {
-    private int id;
-    private String name;
-    private String email;
+    private int id = 0;
+    private String name = null;
+    private String email = null;
 
-    public void id(int id) {
+    public Builder id(int id) {
       this.id = id;
+      return this;
     }
 
-    public void name(String name) {
+    public Builder name(String name) {
       this.name = name;
+      return this;
     }
 
-    public void email(String email) {
+    public Builder email(String email) {
       this.email = email;
+      return this;
     }
 
     public User build() {
-      return new User(id, name, email);
-    }
-
-    public static User build(int id, String name, String email) {
-      return new User(id, name, email);
+      return new User(this);
     }
   }
 
+  private User(Builder b) {
+    id = b.id;
+    name = b.name;
+    email = b.email;
+  }
 }
