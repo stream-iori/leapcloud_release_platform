@@ -14,7 +14,7 @@ public class ReleaseTask {
   private final String proposal;
   private final Date proposalTime;
   private final Date updateTime;
-  private final int status;
+  private final Status status;
   private final String releaseRemark;
 
   public int getId() {
@@ -49,7 +49,7 @@ public class ReleaseTask {
     return updateTime;
   }
 
-  public int getStatus() {
+  public Status getStatus() {
     return status;
   }
 
@@ -82,7 +82,7 @@ public class ReleaseTask {
     private String proposal;
     private Date proposalTime;
     private Date updateTime;
-    private int status;
+    private Status status;
     private String releaseRemark;
 
     public Builder id(int id) {
@@ -125,7 +125,7 @@ public class ReleaseTask {
       return this;
     }
 
-    public Builder status(int status) {
+    public Builder status(Status status) {
       this.status = status;
       return this;
     }
