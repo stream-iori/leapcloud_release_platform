@@ -1,8 +1,8 @@
 package cn.leapcloud.release.platform.service;
 
 import cn.leapcloud.release.platform.dao.UserDAO;
+import cn.leapcloud.release.platform.dao.entity.tables.records.UserRecord;
 import cn.leapcloud.release.platform.service.domain.User;
-
 import org.jooq.DSLContext;
 
 import javax.inject.Inject;
@@ -42,21 +42,18 @@ public class UserServiceImpl implements UserService {
     });
   }
 
-  public User findById(int id) throws Exception{
-
-
-    return  userDAO.queryById(id).
-    })
+  public User findById(int id) throws Exception {
+    UserRecord userRecord = userDAO.queryById(id);
+    return userConvert(userRecord);
   }
 
-
-
-
-
-
-
-
-
+  private User userConvert(UserRecord userRecord) {
+    User user = null;
+    if (userRecord != null) {
+      user = new User.Builder().id(userRecord.getId()).name(userRecord.getName()).email(userRecord.getMail()).build();
+    }
+    return user;
+  }
 
 
 }
