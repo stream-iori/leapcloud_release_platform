@@ -10,11 +10,12 @@ public interface UserDAO {
 
   boolean doCreate(User user, Configuration configuration) throws Exception;
 
-  boolean doDelete(int id) throws Exception;
 
   boolean doUpdate(User user) throws Exception;
 
-  User findById(int id) throws Exception;
+  User queryById(int id) throws Exception;
+
+  User queryByName(String name) throws Exception;
 
 
 }

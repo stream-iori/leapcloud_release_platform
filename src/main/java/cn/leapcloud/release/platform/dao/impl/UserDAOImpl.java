@@ -39,10 +39,6 @@ public class UserDAOImpl implements UserDAO {
     return effectRow > 0;
   }
 
-  public boolean doDelete(int id) throws Exception {
-    int effectRow = jooq.delete(USER).where(USER.ID.equal(id)).execute();
-    return effectRow > 0;
-  }
 
   public boolean doUpdate(User user) throws Exception {
     int effectRow = jooq.update(USER).set(USER.NAME, user.getName()).set(USER.MAIL, user.getEmail())
@@ -50,8 +46,12 @@ public class UserDAOImpl implements UserDAO {
     return effectRow > 0;
   }
 
-  public User findById(int id) throws Exception {
+  public User queryById(int id) throws Exception {
     return jooq.selectFrom(USER).where(USER.ID.equal(id)).fetchOne(userRecordMapper);
 
+  }
+
+  public User queryByName(String name) throws Exception {
+    return jooq.selectFrom(USER).where(USER.NAME.equal(name)).fetchOne(userRecordMapper);
   }
 }
