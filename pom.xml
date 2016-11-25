@@ -202,7 +202,7 @@
                   <name>org.jooq.util.mysql.MySQLDatabase</name>
                   <includes>.*</includes>
                   <excludes/>
-                  <inputSchema>circe</inputSchema>
+                  <inputSchema>leapcloud_release_platform</inputSchema>
                 </database>
 
                 <generate>
