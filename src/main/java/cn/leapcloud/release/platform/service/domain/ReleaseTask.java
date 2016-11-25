@@ -59,7 +59,7 @@ public class ReleaseTask {
 
   @Override
   public String toString() {
-    return "ReleaseTask{" +
+    return "ReleaseTaskDAO{" +
       "id=" + id +
       ", releaseType=" + releaseType +
       ", title='" + title + '\'' +
