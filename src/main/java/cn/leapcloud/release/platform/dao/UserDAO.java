@@ -1,6 +1,6 @@
 package cn.leapcloud.release.platform.dao;
 
-import cn.leapcloud.release.platform.service.domain.User;
+import cn.leapcloud.release.platform.dao.entity.tables.records.UserRecord;
 import org.jooq.Configuration;
 
 /**
@@ -8,14 +8,13 @@ import org.jooq.Configuration;
  */
 public interface UserDAO {
 
-  boolean doCreate(User user, Configuration configuration) throws Exception;
+  boolean doCreate(UserRecord userRecord, Configuration configuration) throws Exception;
 
+  boolean doUpdate(UserRecord userRecord) throws Exception;
 
-  boolean doUpdate(User user) throws Exception;
+  UserRecord queryById(int id) throws Exception;
 
-  User queryById(int id) throws Exception;
-
-  User queryByName(String name) throws Exception;
+  UserRecord queryByName(String name) throws Exception;
 
 
 }

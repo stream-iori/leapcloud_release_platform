@@ -2,10 +2,8 @@ package cn.leapcloud.release.platform.dao.impl;
 
 import cn.leapcloud.release.platform.dao.UserDAO;
 import cn.leapcloud.release.platform.dao.entity.tables.records.UserRecord;
-import cn.leapcloud.release.platform.service.domain.User;
 import org.jooq.Configuration;
 import org.jooq.DSLContext;
-import org.jooq.RecordMapper;
 import org.jooq.impl.DSL;
 
 import static cn.leapcloud.release.platform.dao.entity.tables.User.USER;
@@ -22,36 +20,24 @@ public class UserDAOImpl implements UserDAO {
     this.jooq = jooq;
   }
 
-
-  private RecordMapper<UserRecord, User> userRecordMapper = userRecord -> {
-    User user = null;
-    if (userRecord != null) {
-      user = new User.Builder().id(userRecord.getId()).name(userRecord.getName()).email(userRecord.getMail()).build();
-    }
-    return user;
-  };
-
-
-  public boolean doCreate(User user, Configuration configuration) throws Exception {
+  public boolean doCreate(UserRecord userRecord, Configuration configuration) throws Exception {
     int effectRow = DSL.using(configuration).insertInto(USER)
-      .set(USER.ID, user.getId()).set(USER.NAME, user.getName()).set(USER.MAIL, user.getEmail())
+      .set(USER.NAME, userRecord.getName()).set(USER.MAIL, userRecord.getMail())
       .execute();
     return effectRow > 0;
   }
 
-
-  public boolean doUpdate(User user) throws Exception {
-    int effectRow = jooq.update(USER).set(USER.NAME, user.getName()).set(USER.MAIL, user.getEmail())
-      .where(USER.ID.equal(user.getId())).execute();
+  public boolean doUpdate(UserRecord userRecord) throws Exception {
+    int effectRow = jooq.update(USER).set(USER.NAME, userRecord.getName()).set(USER.MAIL, userRecord.getMail())
+      .where(USER.ID.equal(userRecord.getId())).execute();
     return effectRow > 0;
   }
 
-  public User queryById(int id) throws Exception {
-    return jooq.selectFrom(USER).where(USER.ID.equal(id)).fetchOne(userRecordMapper);
-
+  public UserRecord queryById(int id) throws Exception {
+    return jooq.selectFrom(USER).where(USER.ID.equal(id)).fetchOne();
   }
 
-  public User queryByName(String name) throws Exception {
-    return jooq.selectFrom(USER).where(USER.NAME.equal(name)).fetchOne(userRecordMapper);
+  public UserRecord queryByName(String name) throws Exception {
+    return jooq.selectFrom(USER).where(USER.NAME.equal(name)).fetchOne();
   }
 }
