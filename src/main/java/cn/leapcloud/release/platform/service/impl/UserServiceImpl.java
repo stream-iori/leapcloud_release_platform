@@ -1,7 +1,8 @@
-package cn.leapcloud.release.platform.service;
+package cn.leapcloud.release.platform.service.impl;
 
 import cn.leapcloud.release.platform.dao.UserDAO;
 import cn.leapcloud.release.platform.dao.entity.tables.records.UserRecord;
+import cn.leapcloud.release.platform.service.UserService;
 import cn.leapcloud.release.platform.service.domain.User;
 import org.jooq.DSLContext;
 

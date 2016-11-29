@@ -23,13 +23,13 @@ public class UserDAOImpl implements UserDAO {
 
   public boolean doCreate(User userRecord, Configuration configuration) throws Exception {
     int effectRow = DSL.using(configuration).insertInto(USER)
-      .set(USER.NAME, userRecord.getName()).set(USER.MAIL, userRecord.getMail())
+      .set(USER.NAME, userRecord.getName()).set(USER.MAIL, userRecord.getEmail())
       .execute();
     return effectRow > 0;
   }
 
   public boolean doUpdate(User userRecord, Configuration configuration) throws Exception {
-    int effectRow = jooq.update(USER).set(USER.NAME, userRecord.getName()).set(USER.MAIL, userRecord.getMail())
+    int effectRow = jooq.update(USER).set(USER.NAME, userRecord.getName()).set(USER.MAIL, userRecord.getEmail())
       .where(USER.ID.equal(userRecord.getId())).execute();
     return effectRow > 0;
   }

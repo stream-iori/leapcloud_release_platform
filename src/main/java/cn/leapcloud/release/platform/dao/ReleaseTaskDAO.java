@@ -1,4 +1,4 @@
-package cn.leapcloud.release.platform.dao.impl;
+package cn.leapcloud.release.platform.dao;
 
 import cn.leapcloud.release.platform.dao.entity.tables.records.ReleaseTaskRecord;
 import org.jooq.Configuration;
