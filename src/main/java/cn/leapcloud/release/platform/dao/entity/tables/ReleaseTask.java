@@ -35,7 +35,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class ReleaseTask extends TableImpl<ReleaseTaskRecord> {
 
-	private static final long serialVersionUID = 1996092334;
+	private static final long serialVersionUID = -2125170789;
 
 	/**
 	 * The reference instance of <code>leapcloud_release_platform.release_task</code>
@@ -91,9 +91,9 @@ public class ReleaseTask extends TableImpl<ReleaseTaskRecord> {
 	public final TableField<ReleaseTaskRecord, Timestamp> UPDATE_TIME = createField("update_time", org.jooq.impl.SQLDataType.TIMESTAMP, this, "更新这个字段,当状态改变的时候");
 
 	/**
-	 * The column <code>leapcloud_release_platform.release_task.wDONEstatus</code>. project status,0:wait, 1:done, 2:fail, 3:discard
+	 * The column <code>leapcloud_release_platform.release_task.status</code>. project status,0:wait, 1:done, 2:fail, 3:discard
 	 */
-	public final TableField<ReleaseTaskRecord, Byte> WDONESTATUS = createField("wDONEstatus", org.jooq.impl.SQLDataType.TINYINT.nullable(false).defaulted(true), this, "project status,0:wait, 1:done, 2:fail, 3:discard");
+	public final TableField<ReleaseTaskRecord, Byte> STATUS = createField("status", org.jooq.impl.SQLDataType.TINYINT.nullable(false).defaulted(true), this, "project status,0:wait, 1:done, 2:fail, 3:discard");
 
 	/**
 	 * The column <code>leapcloud_release_platform.release_task.release_remark</code>.

@@ -12,4 +12,13 @@ public interface UserService {
 
   User findById(int id) throws Exception;
 
+  /**
+   * 登录
+   * @param username 用户名
+   * @param password 密码
+   * @return 登录结果
+   * @throws Exception
+   */
+  boolean login(String username, String password) throws RuntimeException;
+
 }

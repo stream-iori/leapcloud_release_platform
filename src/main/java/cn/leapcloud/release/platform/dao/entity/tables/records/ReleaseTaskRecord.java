@@ -30,7 +30,7 @@ import org.jooq.impl.UpdatableRecordImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class ReleaseTaskRecord extends UpdatableRecordImpl<ReleaseTaskRecord> implements Record10<Integer, Integer, String, String, String, String, Timestamp, Timestamp, Byte, String> {
 
-	private static final long serialVersionUID = 1543187658;
+	private static final long serialVersionUID = -922038443;
 
 	/**
 	 * Setter for <code>leapcloud_release_platform.release_task.id</code>.
@@ -145,16 +145,16 @@ public class ReleaseTaskRecord extends UpdatableRecordImpl<ReleaseTaskRecord> im
 	}
 
 	/**
-	 * Setter for <code>leapcloud_release_platform.release_task.wDONEstatus</code>. project status,0:wait, 1:done, 2:fail, 3:discard
+	 * Setter for <code>leapcloud_release_platform.release_task.status</code>. project status,0:wait, 1:done, 2:fail, 3:discard
 	 */
-	public void setWdonestatus(Byte value) {
+	public void setStatus(Byte value) {
 		setValue(8, value);
 	}
 
 	/**
-	 * Getter for <code>leapcloud_release_platform.release_task.wDONEstatus</code>. project status,0:wait, 1:done, 2:fail, 3:discard
+	 * Getter for <code>leapcloud_release_platform.release_task.status</code>. project status,0:wait, 1:done, 2:fail, 3:discard
 	 */
-	public Byte getWdonestatus() {
+	public Byte getStatus() {
 		return (Byte) getValue(8);
 	}
 
@@ -273,7 +273,7 @@ public class ReleaseTaskRecord extends UpdatableRecordImpl<ReleaseTaskRecord> im
 	 */
 	@Override
 	public Field<Byte> field9() {
-		return ReleaseTask.RELEASE_TASK.WDONESTATUS;
+		return ReleaseTask.RELEASE_TASK.STATUS;
 	}
 
 	/**
@@ -353,7 +353,7 @@ public class ReleaseTaskRecord extends UpdatableRecordImpl<ReleaseTaskRecord> im
 	 */
 	@Override
 	public Byte value9() {
-		return getWdonestatus();
+		return getStatus();
 	}
 
 	/**
@@ -441,7 +441,7 @@ public class ReleaseTaskRecord extends UpdatableRecordImpl<ReleaseTaskRecord> im
 	 */
 	@Override
 	public ReleaseTaskRecord value9(Byte value) {
-		setWdonestatus(value);
+		setStatus(value);
 		return this;
 	}
 
@@ -486,7 +486,7 @@ public class ReleaseTaskRecord extends UpdatableRecordImpl<ReleaseTaskRecord> im
 	/**
 	 * Create a detached, initialised ReleaseTaskRecord
 	 */
-	public ReleaseTaskRecord(Integer id, Integer releaseType, String title, String projectLocation, String projectDesc, String proposal, Timestamp proposalTime, Timestamp updateTime, Byte wdonestatus, String releaseRemark) {
+	public ReleaseTaskRecord(Integer id, Integer releaseType, String title, String projectLocation, String projectDesc, String proposal, Timestamp proposalTime, Timestamp updateTime, Byte status, String releaseRemark) {
 		super(ReleaseTask.RELEASE_TASK);
 
 		setValue(0, id);
@@ -497,7 +497,7 @@ public class ReleaseTaskRecord extends UpdatableRecordImpl<ReleaseTaskRecord> im
 		setValue(5, proposal);
 		setValue(6, proposalTime);
 		setValue(7, updateTime);
-		setValue(8, wdonestatus);
+		setValue(8, status);
 		setValue(9, releaseRemark);
 	}
 }

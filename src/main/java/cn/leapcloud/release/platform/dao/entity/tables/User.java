@@ -34,7 +34,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class User extends TableImpl<UserRecord> {
 
-	private static final long serialVersionUID = -997605802;
+	private static final long serialVersionUID = -1520429272;
 
 	/**
 	 * The reference instance of <code>leapcloud_release_platform.user</code>
@@ -63,6 +63,11 @@ public class User extends TableImpl<UserRecord> {
 	 * The column <code>leapcloud_release_platform.user.mail</code>.
 	 */
 	public final TableField<UserRecord, String> MAIL = createField("mail", org.jooq.impl.SQLDataType.VARCHAR.length(30), this, "");
+
+	/**
+	 * The column <code>leapcloud_release_platform.user.password</code>.
+	 */
+	public final TableField<UserRecord, String> PASSWORD = createField("password", org.jooq.impl.SQLDataType.VARCHAR.length(32), this, "");
 
 	/**
 	 * Create a <code>leapcloud_release_platform.user</code> table reference

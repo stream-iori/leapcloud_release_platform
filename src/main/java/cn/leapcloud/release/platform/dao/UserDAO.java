@@ -15,7 +15,7 @@ public interface UserDAO {
 
   UserRecord queryById(int id) throws Exception;
 
-  UserRecord queryByName(String name) throws Exception;
+  UserRecord queryByName(String name);
 
 
 }
