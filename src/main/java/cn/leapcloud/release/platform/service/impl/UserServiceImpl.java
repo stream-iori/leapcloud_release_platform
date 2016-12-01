@@ -48,6 +48,20 @@ public class UserServiceImpl implements UserService {
     return userConvert(userRecord);
   }
 
+  @Override
+  public boolean login(String username, String password) throws RuntimeException {
+    UserRecord userRecord = userDAO.queryByName(username);
+    if (userRecord != null) {
+      if (userRecord.getPassword().equals(password)) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      throw new RuntimeException("不存在此用户");
+    }
+  }
+
   private User userConvert(UserRecord userRecord) {
     User user = null;
     if (userRecord != null) {

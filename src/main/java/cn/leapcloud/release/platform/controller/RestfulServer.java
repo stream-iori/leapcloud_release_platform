@@ -21,7 +21,8 @@ public class RestfulServer {
     this.vertx = vertx;
     this.httpServer = vertx.createHttpServer();
     this.router = Router.router(vertx);
-    new UserController(router);
+
+    new UserController(router, null);
   }
 
   public void start() {
