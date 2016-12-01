@@ -17,6 +17,9 @@ public class UserController {
       routingContext.request().bodyHandler(bodyBuffer -> {
         JsonObject loginData = bodyBuffer.toJsonObject();
         logger.info(loginData);
+        //1. invoke service of user.
+        //2. userService.findByName(user.name());
+        //3. if exist userByFind.password() == user.password();
         routingContext.response().end("OK");
       });
     });
