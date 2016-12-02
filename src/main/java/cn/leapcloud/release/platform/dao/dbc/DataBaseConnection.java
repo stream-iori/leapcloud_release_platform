@@ -14,7 +14,7 @@ import java.sql.SQLException;
  */
 public class DataBaseConnection {
   private static final String DBURL = "jdbc:mysql://localhost:" +
-    "3306/leapcloud_release_platform?useUnicode=true&amp;characterEncoding=UTF-8&amp;useSSL=false";
+    "3306/leapcloud_release_platform?useUnicode=true&characterEncoding=UTF-8&useSSL=false";
   private static final String DBUSER = "root";
   private static final String DBPASS = "root";
 
