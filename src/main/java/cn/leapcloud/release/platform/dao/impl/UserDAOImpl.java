@@ -7,6 +7,8 @@ import org.jooq.Configuration;
 import org.jooq.DSLContext;
 import org.jooq.impl.DSL;
 
+import javax.inject.Inject;
+
 import static cn.leapcloud.release.platform.dao.entity.tables.User.USER;
 
 
@@ -17,6 +19,7 @@ public class UserDAOImpl implements UserDAO {
 
   private DSLContext jooq;
 
+  @Inject
   public UserDAOImpl(DSLContext jooq) {
     this.jooq = jooq;
   }
