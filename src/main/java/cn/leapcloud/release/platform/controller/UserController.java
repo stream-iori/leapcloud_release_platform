@@ -49,13 +49,13 @@ public class UserController{
         //2. 执行登录
         boolean result = userService.login(username, password);
         if (result) {
-          response.setStatusCode(200).setStatusMessage("登录成功");
+          response.setStatusCode(200).setStatusMessage("login success.").end();
         } else {
-          response.setStatusCode(400).setStatusMessage("密码错误");
+          response.setStatusCode(400).setStatusMessage("password incorrect").end();
         }
       }).exceptionHandler(ex -> {
         logger.error("登录错误", ex);
-        routingContext.response().setStatusCode(500).setStatusMessage(ex.getMessage());
+        routingContext.response().setStatusCode(500).setStatusMessage(ex.getMessage()).end();
       }));
   }
 }
