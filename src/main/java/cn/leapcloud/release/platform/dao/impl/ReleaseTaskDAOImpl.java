@@ -37,6 +37,7 @@ public class ReleaseTaskDAOImpl implements ReleaseTaskDAO {
     return effectRow > 0;
   }
 
+
   public boolean doUpdate(ReleaseTaskRecord releaseTaskRecord, Configuration configuration) throws Exception {
 
     int effectRow = jooq.update(RELEASE_TASK)
