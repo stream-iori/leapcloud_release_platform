@@ -13,7 +13,7 @@ import javax.inject.Inject;
 /**
  * Created by stream on.
  */
-public class UserController {
+public class UserController{
 
   private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
@@ -24,10 +24,10 @@ public class UserController {
   public UserController(Router router, UserService userService) {
     this.router = router;
     this.userService = userService;
-    initRoute();
+    initRouter();
   }
 
-  private void initRoute() {
+  private void initRouter() {
     router.post("/login").consumes("application/json").handler(routingContext ->
       routingContext.request().bodyHandler(bodyBuffer -> {
         JsonObject loginData = bodyBuffer.toJsonObject();

@@ -3,23 +3,17 @@ package cn.leapcloud.release.platform;
 import io.vertx.core.Vertx;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
-import io.vertx.ext.unit.Async;
-import io.vertx.ext.unit.TestContext;
-import io.vertx.ext.unit.junit.VertxUnitRunner;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 /**
  * Created by stream.
  */
-@RunWith(VertxUnitRunner.class)
 public class MockServer {
 
   private static final Logger logger = LoggerFactory.getLogger(MockServer.class);
 
-  @Test(timeout = 999999L)
-  public void restfulServer(TestContext context) {
-    Async async = context.async();
+  @Test
+  public void mockMain() throws InterruptedException {
     Vertx vertx = Vertx.vertx();
     vertx.deployVerticle(new Starter(), event -> {
       if (event.succeeded()) {
@@ -28,6 +22,9 @@ public class MockServer {
         logger.error("部署失败", event.cause());
       }
     });
+    while (true) {
+      Thread.sleep(1000L);
+    }
   }
 
 }
