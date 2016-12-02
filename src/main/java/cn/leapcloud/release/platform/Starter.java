@@ -1,7 +1,11 @@
 package cn.leapcloud.release.platform;
 
+import cn.leapcloud.release.platform.Module.GuiceModule;
 import cn.leapcloud.release.platform.controller.RestfulServer;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import io.vertx.core.AbstractVerticle;
+import io.vertx.core.Vertx;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 
@@ -12,16 +16,22 @@ public class Starter extends AbstractVerticle {
 
   private static final Logger logger = LoggerFactory.getLogger(Starter.class);
 
-  private RestfulServer restfulServer;
+  public static void main(String[] args) {
+    Vertx vertx = Vertx.vertx();
+    vertx.deployVerticle(new Starter(), event -> {
+      if (event.succeeded()) {
+        logger.info("部署成功");
+      } else {
+        logger.error("部署失败", event.cause());
+      }
+    });
+  }
+
 
   @Override
   public void start() throws Exception {
-    restfulServer = new RestfulServer(vertx);
+    Injector injector = Guice.createInjector(new GuiceModule(vertx));
+    RestfulServer restfulServer =injector.getInstance(RestfulServer.class);
     restfulServer.start();
-  }
-
-  @Override
-  public void stop() throws Exception {
-    restfulServer.stop();
   }
 }

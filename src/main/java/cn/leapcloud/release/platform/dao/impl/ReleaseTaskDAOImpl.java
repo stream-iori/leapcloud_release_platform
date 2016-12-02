@@ -32,7 +32,7 @@ public class ReleaseTaskDAOImpl implements ReleaseTaskDAO {
       .set(RELEASE_TASK.UPDATE_TIME, releaseTaskRecord.getUpdateTime())
       .set(RELEASE_TASK.RELEASE_REMARK, releaseTaskRecord.getReleaseRemark())
       .set(RELEASE_TASK.RELEASE_TYPE, releaseTaskRecord.getReleaseType())
-      .set(RELEASE_TASK.WDONESTATUS, releaseTaskRecord.getWdonestatus())
+      .set(RELEASE_TASK.STATUS, releaseTaskRecord.getStatus())
       .execute();
     return effectRow > 0;
   }
@@ -48,7 +48,7 @@ public class ReleaseTaskDAOImpl implements ReleaseTaskDAO {
       .set(RELEASE_TASK.UPDATE_TIME, releaseTaskRecord.getUpdateTime())
       .set(RELEASE_TASK.RELEASE_REMARK, releaseTaskRecord.getReleaseRemark())
       .set(RELEASE_TASK.RELEASE_TYPE, releaseTaskRecord.getReleaseType())
-      .set(RELEASE_TASK.WDONESTATUS, releaseTaskRecord.getWdonestatus())
+      .set(RELEASE_TASK.STATUS, releaseTaskRecord.getStatus())
       .where(RELEASE_TASK.ID.equal(releaseTaskRecord.getId()))
       .execute();
     return effectRow > 0;
