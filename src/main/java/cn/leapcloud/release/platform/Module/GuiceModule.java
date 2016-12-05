@@ -1,5 +1,6 @@
 package cn.leapcloud.release.platform.Module;
 
+import cn.leapcloud.release.platform.controller.ReleaseTaskController;
 import cn.leapcloud.release.platform.controller.RestfulServer;
 import cn.leapcloud.release.platform.controller.UserController;
 import cn.leapcloud.release.platform.dao.UserDAO;
@@ -28,6 +29,7 @@ public class GuiceModule implements Module {
     binder.bind(UserService.class).to(UserServiceImpl.class).in(Scopes.SINGLETON);
     binder.bind(UserController.class);
     binder.bind(RestfulServer.class);
+    binder.bind(ReleaseTaskController.class);
   }
 
   @Provides

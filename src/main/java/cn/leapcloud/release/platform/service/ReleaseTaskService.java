@@ -6,7 +6,10 @@ package cn.leapcloud.release.platform.service;
 public interface ReleaseTaskService {
 
 
-  boolean createNewTask(int releaseType, String proposal, String title, String projectURL, String projectDescription) throws Exception;
+  boolean createNewTask(int releaseType, String proposal, String title, String projectURL, String projectDescription)
+    throws Exception;
 
+  boolean updateNewTask(int id, int releaseType, String proposal, String title, String projectURL, String projectDescription)
+    throws Exception;
 
 }
