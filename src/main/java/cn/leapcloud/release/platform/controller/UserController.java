@@ -13,7 +13,7 @@ import javax.inject.Inject;
 /**
  * Created by stream on.
  */
-public class UserController{
+public class UserController {
 
   private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
