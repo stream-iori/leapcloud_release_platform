@@ -6,6 +6,8 @@ import cn.leapcloud.release.platform.service.ReleaseTaskService;
 import com.google.inject.Inject;
 import org.jooq.DSLContext;
 
+import java.sql.Timestamp;
+
 import static cn.leapcloud.release.platform.dao.entity.tables.ReleaseTask.RELEASE_TASK;
 
 /**
@@ -25,9 +27,15 @@ public class ReleaseTaskServiceImpl implements ReleaseTaskService {
   public boolean createNewTask(int releaseType, String proposal, String title, String projectURL, String projectDescription) throws Exception {
     return jooq.transactionResult(configuration -> {
       ReleaseTaskRecord releaseTaskRecord = jooq.newRecord(RELEASE_TASK);
+      //当前时间
+      Timestamp now = new Timestamp(System.currentTimeMillis());
+
       releaseTaskRecord.setReleaseType(releaseType);
       releaseTaskRecord.setProposal(proposal);
       releaseTaskRecord.setTitle(title);
+      releaseTaskRecord.setStatus((byte) 0);
+      releaseTaskRecord.setProposalTime(now);
+      releaseTaskRecord.setUpdateTime(now);
       releaseTaskRecord.setProjectLocation(projectURL);
       releaseTaskRecord.setProjectDesc(projectDescription);
       boolean resultCreateNewTask = releaseTaskDAO.doCreate(releaseTaskRecord, configuration);

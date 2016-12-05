@@ -13,10 +13,13 @@ public class ReleaseTaskController {
   private ReleaseTaskService releaseTaskService;
   private Router router;
 
+
   @Inject
   public ReleaseTaskController(ReleaseTaskService releaseTaskService, Router router) {
     this.releaseTaskService = releaseTaskService;
+
     this.router = router;
+
   }
 
   public void insertNewTask() {
@@ -28,6 +31,8 @@ public class ReleaseTaskController {
         String title = jsonObject.getString("title");
         String projectURL = jsonObject.getString("projectURL");
         String projectDescription = jsonObject.getString("projectDescription");
+
+
         try {
           boolean result = releaseTaskService.createNewTask(releaseType, proposal, title, projectURL, projectDescription);
           if (result) {

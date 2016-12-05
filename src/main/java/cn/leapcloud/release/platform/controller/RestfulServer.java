@@ -18,7 +18,7 @@ public class RestfulServer {
   private static final Logger logger = LoggerFactory.getLogger(RestfulServer.class);
 
   @Inject
-  public RestfulServer(Vertx vertx, Router router, UserController userController) {
+  public RestfulServer(Vertx vertx, Router router, UserController userController, ReleaseTaskController releaseTaskController) {
     this.httpServer = vertx.createHttpServer().requestHandler(router::accept);
     this.router = router;
   }

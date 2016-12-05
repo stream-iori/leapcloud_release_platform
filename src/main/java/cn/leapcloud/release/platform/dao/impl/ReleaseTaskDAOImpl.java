@@ -2,6 +2,7 @@ package cn.leapcloud.release.platform.dao.impl;
 
 import cn.leapcloud.release.platform.dao.ReleaseTaskDAO;
 import cn.leapcloud.release.platform.dao.entity.tables.records.ReleaseTaskRecord;
+import com.google.inject.Inject;
 import org.jooq.Configuration;
 import org.jooq.DSLContext;
 import org.jooq.impl.DSL;
@@ -16,6 +17,7 @@ public class ReleaseTaskDAOImpl implements ReleaseTaskDAO {
 
   private DSLContext jooq;
 
+@Inject
   public ReleaseTaskDAOImpl(DSLContext jooq) {
     this.jooq = jooq;
   }
