@@ -42,7 +42,8 @@ public class ReleaseTaskDAOImpl implements ReleaseTaskDAO {
 
   public boolean doUpdate(ReleaseTaskRecord releaseTaskRecord, Configuration configuration) throws Exception {
 
-    int effectRow = jooq.update(RELEASE_TASK)
+    int effectRow = DSL.using(configuration)
+      .update(RELEASE_TASK)
       .set(RELEASE_TASK.TITLE, releaseTaskRecord.getTitle())
       .set(RELEASE_TASK.PROJECT_DESC, releaseTaskRecord.getProjectDesc())
       .set(RELEASE_TASK.PROJECT_LOCATION, releaseTaskRecord.getProjectLocation())

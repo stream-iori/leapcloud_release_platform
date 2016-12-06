@@ -1,7 +1,6 @@
 package cn.leapcloud.release.platform;
 
 import cn.leapcloud.release.platform.Module.GuiceModule;
-import cn.leapcloud.release.platform.controller.ReleaseTaskController;
 import cn.leapcloud.release.platform.controller.RestfulServer;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -21,12 +20,8 @@ public class Starter extends AbstractVerticle {
   @Override
   public void start() throws Exception {
     Injector injector = Guice.createInjector(new GuiceModule(vertx));
-    restfulServer =injector.getInstance(RestfulServer.class);
+    restfulServer = injector.getInstance(RestfulServer.class);
     restfulServer.start();
-    ReleaseTaskController releaseTaskController =injector.getInstance(ReleaseTaskController.class);
-    releaseTaskController.insertNewTask();
-
-
   }
 
   public void stop() throws Exception {

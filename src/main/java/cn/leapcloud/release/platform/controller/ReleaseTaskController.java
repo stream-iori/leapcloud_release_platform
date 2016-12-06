@@ -17,9 +17,9 @@ public class ReleaseTaskController {
   @Inject
   public ReleaseTaskController(ReleaseTaskService releaseTaskService, Router router) {
     this.releaseTaskService = releaseTaskService;
-
     this.router = router;
-
+    insertNewTask();
+    freshNewTask();
   }
 
   public void insertNewTask() {
@@ -70,6 +70,4 @@ public class ReleaseTaskController {
       });
     });
   }
-
-
 }

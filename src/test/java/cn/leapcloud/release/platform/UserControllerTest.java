@@ -1,7 +1,7 @@
 package cn.leapcloud.release.platform;
 
+import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
-import io.vertx.core.http.HttpClientResponse;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
@@ -27,38 +27,40 @@ public class UserControllerTest {
 
   @BeforeClass
   public static void before() {
-    rule.vertx().deployVerticle(new Starter(), event -> {
+    Handler<AsyncResult<String>> asyncResultHandler = event -> {
       if (event.succeeded()) {
         logger.info("deploy release-platform success");
       } else {
         logger.error("deploy release-platform failed.", event.cause());
       }
-    });
+    };
+
+    rule.vertx().deployVerticle(new Starter(), asyncResultHandler);
   }
 
   @Test
   public void login(TestContext context) {
-    //开启异步
     Async async = context.async();
-
     JsonObject body = new JsonObject().put("username", "stream").put("password", "123");
 
-    //处理http response
-    Handler<HttpClientResponse> responseHandler = response -> {
-      //response注册一个异常handler,如果http请求过程中发生异常，则测试失败
+    rule.vertx().createHttpClient().post(8888, "localhost", "/login", response -> {
       response.exceptionHandler(ex -> context.fail(ex));
-
-      //判断response code是不是200
       context.assertEquals(200, response.statusCode());
-
-      //使测试完成
       async.complete();
-    };
+    }).putHeader("Content-Type", "application/json").end(body.encode());
 
-    rule.vertx().createHttpClient()
-      .post(8888, "localhost", "/login", responseHandler)
-      .putHeader("Content-Type", "application/json")
-      .end(body.encode());
+//
+//    Handler<HttpClientResponse> responseHandler = response -> {
+//      //response注册一个异常handler,如果http请求过程中发生异常，则测试失败
+//      response.exceptionHandler(ex -> context.fail(ex));
+//      //判断response code是不是200
+//      context.assertEquals(200, response.statusCode());
+//      //使测试完成
+//      async.complete();
+//    };
+//    rule.vertx().createHttpClient()
+//      .post(8888, "localhost", "/login", responseHandler)
+//      .putHeader("Content-Type", "application/json")
+//      .end(body.encode());
   }
-
 }
