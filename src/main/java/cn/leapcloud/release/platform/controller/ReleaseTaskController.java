@@ -1,9 +1,14 @@
 package cn.leapcloud.release.platform.controller;
 
 import cn.leapcloud.release.platform.service.ReleaseTaskService;
+import cn.leapcloud.release.platform.service.domain.ReleaseTask;
 import com.google.inject.Inject;
+import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
+
+import java.util.List;
+
 
 /**
  * Created by songqian on 16/12/5.
@@ -20,6 +25,7 @@ public class ReleaseTaskController {
     this.router = router;
     insertNewTask();
     freshNewTask();
+    searchNewTask();
   }
 
   public void insertNewTask() {
@@ -68,6 +74,22 @@ public class ReleaseTaskController {
           e.printStackTrace();
         }
       });
+    });
+  }
+
+  public void searchNewTask() {
+    router.get("/alltask").handler(routingContext -> {
+      try {
+        JsonArray tasks = new JsonArray();
+        List<ReleaseTask> releaseTasks = releaseTaskService.queryAll();
+        for (ReleaseTask releaseTask : releaseTasks) {
+          JsonObject task = releaseTask.toJson();
+          tasks.add(task);
+        }
+        routingContext.response().end(tasks.encode());
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
     });
   }
 }

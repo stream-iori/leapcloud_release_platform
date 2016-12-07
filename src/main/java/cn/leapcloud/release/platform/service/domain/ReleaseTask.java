@@ -1,5 +1,7 @@
 package cn.leapcloud.release.platform.service.domain;
 
+import io.vertx.core.json.JsonObject;
+
 import java.util.Date;
 
 /**
@@ -55,6 +57,21 @@ public class ReleaseTask {
 
   public String getReleaseRemark() {
     return releaseRemark;
+  }
+
+  public JsonObject toJson() {
+    JsonObject jsonObject = new JsonObject();
+    jsonObject.put("id", id);
+    jsonObject.put("releaseType", releaseType);
+    jsonObject.put("title", title);
+    jsonObject.put("projectLocation", projectDesc);
+    jsonObject.put("projectDescription", projectDesc);
+    jsonObject.put("proposal", proposal);
+    jsonObject.put("proposalTime", proposalTime.toString());
+    jsonObject.put("updateTime", updateTime.toString());
+    jsonObject.put("status", status);
+    jsonObject.put("releaseRemark", releaseRemark);
+    return jsonObject;
   }
 
   @Override

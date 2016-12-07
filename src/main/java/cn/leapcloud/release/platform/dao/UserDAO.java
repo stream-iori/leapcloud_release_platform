@@ -16,5 +16,4 @@ public interface UserDAO {
 
   UserRecord queryByName(String name);
 
-
 }

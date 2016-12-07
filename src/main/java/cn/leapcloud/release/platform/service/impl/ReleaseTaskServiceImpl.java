@@ -3,10 +3,13 @@ package cn.leapcloud.release.platform.service.impl;
 import cn.leapcloud.release.platform.dao.ReleaseTaskDAO;
 import cn.leapcloud.release.platform.dao.entity.tables.records.ReleaseTaskRecord;
 import cn.leapcloud.release.platform.service.ReleaseTaskService;
+import cn.leapcloud.release.platform.service.domain.ReleaseTask;
 import com.google.inject.Inject;
 import org.jooq.DSLContext;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 import static cn.leapcloud.release.platform.dao.entity.tables.ReleaseTask.RELEASE_TASK;
 
@@ -65,5 +68,32 @@ public class ReleaseTaskServiceImpl implements ReleaseTaskService {
     });
   }
 
+  @Override
+  public List<ReleaseTask> queryAll() throws Exception {
+    List<ReleaseTask> releaseTasks = new ArrayList<>();
+    List<ReleaseTaskRecord> releaseTaskRecords = releaseTaskDAO.query();
+    ReleaseTask.Builder builder = new ReleaseTask.Builder();
+
+    for (ReleaseTaskRecord releaseTaskRecord : releaseTaskRecords) {
+      ReleaseTask releaseTask = convertEntityToDomain(builder, releaseTaskRecord);
+      releaseTasks.add(releaseTask);
+    }
+    return releaseTasks;
+  }
+
+  private ReleaseTask convertEntityToDomain(ReleaseTask.Builder builder, ReleaseTaskRecord releaseTaskRecord) {
+    builder.proposal(releaseTaskRecord.getProposal());
+    builder.title(releaseTaskRecord.getTitle());
+    builder.id(releaseTaskRecord.getId());
+    builder.projectDesc(releaseTaskRecord.getProposal());
+    builder.projectLocation(releaseTaskRecord.getProjectLocation());
+    builder.releaseRemark(releaseTaskRecord.getReleaseRemark());
+    builder.proposalTime(releaseTaskRecord.getProposalTime());
+    builder.releaseType(releaseTaskRecord.getReleaseType());
+    builder.updateTime(releaseTaskRecord.getUpdateTime());
+    builder.releaseRemark(releaseTaskRecord.getReleaseRemark());
+
+    return builder.build();
+  }
 }
 
