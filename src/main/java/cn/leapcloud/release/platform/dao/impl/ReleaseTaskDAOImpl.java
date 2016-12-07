@@ -2,9 +2,12 @@ package cn.leapcloud.release.platform.dao.impl;
 
 import cn.leapcloud.release.platform.dao.ReleaseTaskDAO;
 import cn.leapcloud.release.platform.dao.entity.tables.records.ReleaseTaskRecord;
+import com.google.inject.Inject;
 import org.jooq.Configuration;
 import org.jooq.DSLContext;
 import org.jooq.impl.DSL;
+
+import java.util.List;
 
 import static cn.leapcloud.release.platform.dao.entity.tables.ReleaseTask.RELEASE_TASK;
 
@@ -16,6 +19,7 @@ public class ReleaseTaskDAOImpl implements ReleaseTaskDAO {
 
   private DSLContext jooq;
 
+  @Inject
   public ReleaseTaskDAOImpl(DSLContext jooq) {
     this.jooq = jooq;
   }
@@ -37,9 +41,11 @@ public class ReleaseTaskDAOImpl implements ReleaseTaskDAO {
     return effectRow > 0;
   }
 
+  @Override
   public boolean doUpdate(ReleaseTaskRecord releaseTaskRecord, Configuration configuration) throws Exception {
 
-    int effectRow = jooq.update(RELEASE_TASK)
+    int effectRow = DSL.using(configuration)
+      .update(RELEASE_TASK)
       .set(RELEASE_TASK.TITLE, releaseTaskRecord.getTitle())
       .set(RELEASE_TASK.PROJECT_DESC, releaseTaskRecord.getProjectDesc())
       .set(RELEASE_TASK.PROJECT_LOCATION, releaseTaskRecord.getProjectLocation())
@@ -54,11 +60,15 @@ public class ReleaseTaskDAOImpl implements ReleaseTaskDAO {
     return effectRow > 0;
   }
 
+  @Override
   public ReleaseTaskRecord queryById(int id) throws Exception {
     return jooq.selectFrom(RELEASE_TASK)
       .where(RELEASE_TASK.ID.equal(id))
       .fetchOne();
   }
 
-
+  @Override
+  public List<ReleaseTaskRecord> query() throws Exception {
+    return jooq.selectFrom(RELEASE_TASK).fetch();
+  }
 }

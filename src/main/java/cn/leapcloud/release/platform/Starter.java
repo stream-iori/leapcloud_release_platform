@@ -20,7 +20,7 @@ public class Starter extends AbstractVerticle {
   @Override
   public void start() throws Exception {
     Injector injector = Guice.createInjector(new GuiceModule(vertx));
-    restfulServer =injector.getInstance(RestfulServer.class);
+    restfulServer = injector.getInstance(RestfulServer.class);
     restfulServer.start();
   }
 

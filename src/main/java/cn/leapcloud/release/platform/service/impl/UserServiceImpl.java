@@ -8,6 +8,8 @@ import org.jooq.DSLContext;
 
 import javax.inject.Inject;
 
+import static cn.leapcloud.release.platform.dao.entity.tables.User.USER;
+
 /**
  * Created by songqian on 16/11/25.
  */
@@ -23,7 +25,11 @@ public class UserServiceImpl implements UserService {
 
   public boolean createUser(User user) throws Exception {
     return jooq.transactionResult(configuration -> {
-      boolean userCreateResult = userDAO.doCreate(user, configuration);
+      UserRecord userRecord = jooq.newRecord(USER);
+      userRecord.setName(user.getName());
+      userRecord.setMail(user.getEmail());
+
+      boolean userCreateResult = userDAO.doCreate(userRecord, configuration);
       if (userCreateResult) {
         return true;
       } else {
@@ -34,7 +40,10 @@ public class UserServiceImpl implements UserService {
 
   public boolean modifyUser(User user) throws Exception {
     return jooq.transactionResult(configuration -> {
-      boolean userModifyResult = userDAO.doUpdate(user, configuration);
+      UserRecord userRecord = jooq.newRecord(USER);
+      userRecord.setName(user.getName());
+      userRecord.setMail(user.getEmail());
+      boolean userModifyResult = userDAO.doUpdate(userRecord, configuration);
       if (userModifyResult) {
         return true;
       } else {

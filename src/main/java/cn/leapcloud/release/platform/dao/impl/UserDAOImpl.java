@@ -2,7 +2,6 @@ package cn.leapcloud.release.platform.dao.impl;
 
 import cn.leapcloud.release.platform.dao.UserDAO;
 import cn.leapcloud.release.platform.dao.entity.tables.records.UserRecord;
-import cn.leapcloud.release.platform.service.domain.User;
 import org.jooq.Configuration;
 import org.jooq.DSLContext;
 import org.jooq.impl.DSL;
@@ -24,15 +23,15 @@ public class UserDAOImpl implements UserDAO {
     this.jooq = jooq;
   }
 
-  public boolean doCreate(User userRecord, Configuration configuration) throws Exception {
+  public boolean doCreate(UserRecord userRecord, Configuration configuration) throws Exception {
     int effectRow = DSL.using(configuration).insertInto(USER)
-      .set(USER.NAME, userRecord.getName()).set(USER.MAIL, userRecord.getEmail())
+      .set(USER.NAME, userRecord.getName()).set(USER.MAIL, userRecord.getMail())
       .execute();
     return effectRow > 0;
   }
 
-  public boolean doUpdate(User userRecord, Configuration configuration) throws Exception {
-    int effectRow = jooq.update(USER).set(USER.NAME, userRecord.getName()).set(USER.MAIL, userRecord.getEmail())
+  public boolean doUpdate(UserRecord userRecord, Configuration configuration) throws Exception {
+    int effectRow = jooq.update(USER).set(USER.NAME, userRecord.getName()).set(USER.MAIL, userRecord.getMail())
       .where(USER.ID.equal(userRecord.getId())).execute();
     return effectRow > 0;
   }

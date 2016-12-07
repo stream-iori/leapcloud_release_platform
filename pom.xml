@@ -136,8 +136,6 @@
             <!-- Specify the maven code generator plugin -->
             <groupId>org.jooq</groupId>
             <artifactId>jooq-codegen-maven</artifactId>
-            <version>${jooq.version}</version>
-
             <!-- The plugin should hook into the generate goal -->
             <executions>
               <execution>
