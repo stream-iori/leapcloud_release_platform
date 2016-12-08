@@ -16,6 +16,6 @@ public interface ReleaseTaskService {
   boolean updateNewTask(int id, int releaseType, String proposal, String title, String projectURL, String projectDescription)
     throws Exception;
 
-  List<ReleaseTask> queryAll() throws Exception ;
+  List<ReleaseTask> queryAll(int pageSize,int currentPaged) throws Exception ;
 
 }

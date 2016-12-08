@@ -69,9 +69,9 @@ public class ReleaseTaskServiceImpl implements ReleaseTaskService {
   }
 
   @Override
-  public List<ReleaseTask> queryAll() throws Exception {
+  public List<ReleaseTask> queryAll( int pageSize,int currentPaged) throws Exception {
     List<ReleaseTask> releaseTasks = new ArrayList<>();
-    List<ReleaseTaskRecord> releaseTaskRecords = releaseTaskDAO.query();
+    List<ReleaseTaskRecord> releaseTaskRecords = releaseTaskDAO.query(pageSize,currentPaged);
     ReleaseTask.Builder builder = new ReleaseTask.Builder();
 
     for (ReleaseTaskRecord releaseTaskRecord : releaseTaskRecords) {

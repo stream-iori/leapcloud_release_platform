@@ -16,7 +16,7 @@ public interface ReleaseTaskDAO {
 
   ReleaseTaskRecord queryById(int id) throws Exception;
 
-  List<ReleaseTaskRecord> query() throws Exception;
+  List<ReleaseTaskRecord> query( int pageSize, int currentPaged) throws Exception;
 
 
 

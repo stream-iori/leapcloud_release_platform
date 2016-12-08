@@ -68,7 +68,10 @@ public class ReleaseTaskDAOImpl implements ReleaseTaskDAO {
   }
 
   @Override
-  public List<ReleaseTaskRecord> query() throws Exception {
-    return jooq.selectFrom(RELEASE_TASK).fetch();
+  public List<ReleaseTaskRecord> query(int pageSize, int currentPaged) throws Exception {
+
+      int offset = (currentPaged - 1) * pageSize;
+      return jooq.selectFrom(RELEASE_TASK).limit(offset, pageSize).fetch();
+
   }
 }
