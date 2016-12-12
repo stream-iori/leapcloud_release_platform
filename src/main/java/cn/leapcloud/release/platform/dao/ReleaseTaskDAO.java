@@ -1,9 +1,8 @@
 package cn.leapcloud.release.platform.dao;
 
 import cn.leapcloud.release.platform.dao.entity.tables.records.ReleaseTaskRecord;
+import cn.leapcloud.release.platform.dao.impl.TaskRecordWithCount;
 import org.jooq.Configuration;
-
-import java.util.List;
 
 /**
  * Created by songqian on 16/11/25.
@@ -16,10 +15,7 @@ public interface ReleaseTaskDAO {
 
   ReleaseTaskRecord queryById(int id) throws Exception;
 
-  List<ReleaseTaskRecord> query( int pageSize, int currentPaged) throws Exception;
-
-
-
+  TaskRecordWithCount query(int pageSize, int currentPaged) throws Exception;
 
 
 }
