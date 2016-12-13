@@ -6,7 +6,6 @@ import io.vertx.core.http.HttpServerResponse;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
-import io.vertx.ext.web.Cookie;
 import io.vertx.ext.web.Router;
 
 import javax.inject.Inject;
@@ -35,8 +34,7 @@ public class UserController {
         HttpServerResponse response = routingContext.response();
         String username = loginData.getString("username");
         String password = loginData.getString("password");
-        routingContext.addCookie(Cookie.cookie("isLogin", "true"));
-        response.setStatusCode(200).setStatusMessage("login success.").end();
+
         //1.判断字段是否为空
         if (Strings.isNullOrEmpty(username)) {
           response.setStatusCode(400).setStatusMessage("username can not be null.").end();
@@ -51,6 +49,8 @@ public class UserController {
         //2. 执行登录
         boolean result = userService.login(username, password);
         if (result) {
+          //3. 设置session
+          routingContext.session().put("userInfo", new JsonObject().put("name", username));
           response.setStatusCode(200).setStatusMessage("login success.").end();
         } else {
           response.setStatusCode(400).setStatusMessage("password incorrect").end();
