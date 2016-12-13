@@ -20,6 +20,9 @@ import cn.leapcloud.release.platform.service.impl.UserServiceImpl;
 import com.google.inject.*;
 import io.vertx.core.Vertx;
 import io.vertx.ext.web.Router;
+import io.vertx.ext.web.handler.CookieHandler;
+import io.vertx.ext.web.handler.SessionHandler;
+import io.vertx.ext.web.sstore.LocalSessionStore;
 import org.jooq.DSLContext;
 
 /**
@@ -63,7 +66,10 @@ public class GuiceModule implements Module {
   @Provides
   @Singleton
   public Router router() {
-    return Router.router(vertx);
+    Router router = Router.router(vertx);
+    router.route().handler(CookieHandler.create());
+    router.route().handler(SessionHandler.create(LocalSessionStore.create(vertx)));
+    return router;
   }
 
 
