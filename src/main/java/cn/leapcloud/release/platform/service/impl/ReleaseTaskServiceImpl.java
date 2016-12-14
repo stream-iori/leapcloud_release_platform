@@ -69,6 +69,22 @@ public class ReleaseTaskServiceImpl implements ReleaseTaskService {
   }
 
   @Override
+  public boolean manageNewTask(int id, byte status, String releaseRemark) throws Exception {
+    return jooq.transactionResult(configuration -> {
+      ReleaseTaskRecord releaseTaskRecord = jooq.newRecord(RELEASE_TASK);
+      releaseTaskRecord.setId(id);
+      releaseTaskRecord.setStatus(status);
+      releaseTaskRecord.setReleaseRemark(releaseRemark);
+      boolean resultMangeNewTask = releaseTaskDAO.doUpdate(releaseTaskRecord, configuration);
+      if(resultMangeNewTask){
+        return true;
+      }else {
+        throw new RuntimeException("manage failed");
+      }
+    });
+  }
+
+  @Override
   public List<ReleaseTask> queryAll() throws Exception {
     List<ReleaseTask> releaseTasks = new ArrayList<>();
     List<ReleaseTaskRecord> releaseTaskRecords = releaseTaskDAO.query();

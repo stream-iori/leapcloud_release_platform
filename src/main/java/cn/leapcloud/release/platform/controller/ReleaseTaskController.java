@@ -26,10 +26,12 @@ public class ReleaseTaskController {
     insertNewTask();
     freshNewTask();
     searchNewTask();
+    disposalTask();
   }
 
   public void insertNewTask() {
     router.post("/task").consumes("application/json").handler(routingContext -> {
+
       routingContext.request().bodyHandler(buffer -> {
         JsonObject jsonObject = buffer.toJsonObject();
         int releaseType = jsonObject.getInteger("releaseType");
@@ -76,6 +78,38 @@ public class ReleaseTaskController {
       });
     });
   }
+
+  public void disposalTask() {
+
+    router.put("/disposaltask").consumes("application/json").handler(routingContext -> {
+
+
+      JsonObject userInfo = routingContext.session().get("userInfo");
+      if (userInfo == null || userInfo.getString("name") == null) {
+        routingContext.response().setStatusCode(401).setStatusMessage("authentication failed,please login").end();
+      }
+
+
+      routingContext.request().bodyHandler(buffer -> {
+        JsonObject jsonObject = buffer.toJsonObject();
+        int id = jsonObject.getInteger("id");
+        int status1 = jsonObject.getInteger("status");
+        byte status = (byte) status1;
+        String releaseRemark = jsonObject.getString("releaseRemark");
+        try {
+          boolean result = releaseTaskService.manageNewTask(id, status, releaseRemark);
+          if (result) {
+            routingContext.response().end("disposal succeed");
+          } else {
+            routingContext.response().end("disposal failed");
+          }
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+      });
+    });
+  }
+
 
   public void searchNewTask() {
     router.get("/alltask").handler(routingContext -> {

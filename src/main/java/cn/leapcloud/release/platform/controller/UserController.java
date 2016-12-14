@@ -50,7 +50,9 @@ public class UserController {
         boolean result = userService.login(username, password);
         if (result) {
           //3. 设置session
+
           routingContext.session().put("userInfo", new JsonObject().put("name", username));
+
           response.setStatusCode(200).setStatusMessage("login success.").end();
         } else {
           response.setStatusCode(400).setStatusMessage("password incorrect").end();
