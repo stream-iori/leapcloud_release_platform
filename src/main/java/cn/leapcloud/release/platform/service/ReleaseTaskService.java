@@ -1,8 +1,6 @@
 package cn.leapcloud.release.platform.service;
 
-import cn.leapcloud.release.platform.service.domain.ReleaseTask;
-
-import java.util.List;
+import cn.leapcloud.release.platform.dao.impl.TaskWithCount;
 
 /**
  * Created by songqian on 16/12/2.
@@ -16,6 +14,8 @@ public interface ReleaseTaskService {
   boolean updateNewTask(int id, int releaseType, String proposal, String title, String projectURL, String projectDescription)
     throws Exception;
 
-  List<ReleaseTask> queryAll() throws Exception ;
+
+  TaskWithCount queryAll(int pageSize, int currentPaged) throws Exception;
+
 
 }

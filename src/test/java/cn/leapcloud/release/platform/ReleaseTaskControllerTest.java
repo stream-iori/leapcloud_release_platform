@@ -19,7 +19,7 @@ import org.junit.runner.RunWith;
 @RunWith(VertxUnitRunner.class)
 public class ReleaseTaskControllerTest {
 
-  private static final Logger logger = LoggerFactory.getLogger(UserControllerTest.class);
+  private static final Logger logger = LoggerFactory.getLogger(ReleaseTaskControllerTest.class);
 
   @ClassRule
   public static RunTestOnContext rule = new RunTestOnContext();
