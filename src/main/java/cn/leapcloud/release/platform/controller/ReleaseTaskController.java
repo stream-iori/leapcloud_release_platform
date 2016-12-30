@@ -1,13 +1,10 @@
 package cn.leapcloud.release.platform.controller;
 
 import cn.leapcloud.release.platform.service.ReleaseTaskService;
-import cn.leapcloud.release.platform.service.domain.ReleaseTask;
 import com.google.inject.Inject;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
-
-import java.util.List;
 
 
 /**
@@ -85,7 +82,6 @@ public class ReleaseTaskController {
       if (userInfo == null || userInfo.getString("name") == null) {
         routingContext.response().setStatusCode(401).setStatusMessage("authentication failed,please login").end();
         return;
-
       }
       routingContext.request().bodyHandler(buffer -> {
         JsonObject jsonObject = buffer.toJsonObject();
@@ -119,14 +115,14 @@ public class ReleaseTaskController {
 
 
         JsonArray tasks = new JsonArray();
-        List<ReleaseTask> releaseTasks = releaseTaskService.queryAll(pagesize, currentpaged).getReleaseTasks();
-        int totalCount = releaseTaskService.queryAll(pagesize, currentpaged).getTotalCount();
-
-        for (ReleaseTask releaseTask : releaseTasks) {
-          JsonObject task = releaseTask.toJson();
-          tasks.add(task);
-        }
-        routingContext.response().end(tasks.encode());
+//        List<ReleaseTask> releaseTasks = releaseTaskService.queryAll(pagesize, currentpaged).getReleaseTasks();
+//        int totalCount = releaseTaskService.queryAll(pagesize, currentpaged).getTotalCount();
+//
+//        for (ReleaseTask releaseTask : releaseTasks) {
+//          JsonObject task = releaseTask.toJson();
+//          tasks.add(task);
+//        }
+//        routingContext.response().end(tasks.encode());
 
 
       } catch (Exception e) {
