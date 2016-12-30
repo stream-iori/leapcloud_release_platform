@@ -2,18 +2,17 @@ package cn.leapcloud.release.platform.service.impl;
 
 import cn.leapcloud.release.platform.dao.ReleaseTaskDAO;
 import cn.leapcloud.release.platform.dao.entity.tables.records.ReleaseTaskRecord;
-import cn.leapcloud.release.platform.dao.impl.TaskRecordWithCount;
+import cn.leapcloud.release.platform.dao.impl.TaskWithCount;
 import cn.leapcloud.release.platform.service.ReleaseTaskService;
 import cn.leapcloud.release.platform.service.domain.ReleaseTask;
 import com.google.inject.Inject;
 import org.jooq.DSLContext;
-import org.jooq.Field;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 import static cn.leapcloud.release.platform.dao.entity.tables.ReleaseTask.RELEASE_TASK;
-import static org.jooq.impl.DSL.count;
 
 /**
  * Created by songqian on 16/12/2.
@@ -87,6 +86,22 @@ public class ReleaseTaskServiceImpl implements ReleaseTaskService {
   }
 
 
+  @Override
+  public TaskWithCount queryAll(int pageSize, int currentPaged) throws Exception {
+
+    List<ReleaseTask> releaseTasks = new ArrayList<>();
+    List<ReleaseTaskRecord> releaseTaskRecords = releaseTaskDAO.query(pageSize, currentPaged).getRecords();
+    int totalCountUp = releaseTaskDAO.query(pageSize, currentPaged).getTotalCount();
+
+    ReleaseTask.Builder builder = new ReleaseTask.Builder();
+
+    for (ReleaseTaskRecord releaseTaskRecord : releaseTaskRecords) {
+      ReleaseTask releaseTask = convertEntityToDomain(builder, releaseTaskRecord);
+      releaseTasks.add(releaseTask);
+    }
+
+    return new TaskWithCount(totalCountUp, releaseTasks);
+  }
 
 
 
