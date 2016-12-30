@@ -16,6 +16,6 @@ public interface ReleaseTaskService {
 
   boolean manageNewTask(int id , byte status, String releaseRemark) throws Exception;
 
-
+  TaskWithCount queryAll(int pageSize, int currentPaged) throws Exception;
 
 }
