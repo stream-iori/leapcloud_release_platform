@@ -80,16 +80,13 @@ public class ReleaseTaskController {
   }
 
   public void disposalTask() {
-
     router.put("/disposaltask").consumes("application/json").handler(routingContext -> {
-
-
       JsonObject userInfo = routingContext.session().get("userInfo");
       if (userInfo == null || userInfo.getString("name") == null) {
         routingContext.response().setStatusCode(401).setStatusMessage("authentication failed,please login").end();
+        return;
+
       }
-
-
       routingContext.request().bodyHandler(buffer -> {
         JsonObject jsonObject = buffer.toJsonObject();
         int id = jsonObject.getInteger("id");
@@ -99,9 +96,11 @@ public class ReleaseTaskController {
         try {
           boolean result = releaseTaskService.manageNewTask(id, status, releaseRemark);
           if (result) {
-            routingContext.response().end("disposal succeed");
+            routingContext.response().setStatusCode(200).setStatusMessage("disposal succeed").end();
+
           } else {
-            routingContext.response().end("disposal failed");
+            routingContext.response().setStatusCode(400).setStatusMessage("disposal failed").end();
+
           }
         } catch (Exception e) {
           e.printStackTrace();

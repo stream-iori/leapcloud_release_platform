@@ -53,7 +53,7 @@ public class ReleaseTaskServiceImpl implements ReleaseTaskService {
   public boolean updateNewTask(int id, int releaseType, String proposal, String title, String projectURL, String projectDescription) throws Exception {
     return jooq.transactionResult(configuration -> {
       ReleaseTaskRecord releaseTaskRecord = jooq.newRecord(RELEASE_TASK);
-      releaseTaskRecord.setId(id);
+      releaseTaskRecord = releaseTaskDAO.queryById(id);
       releaseTaskRecord.setReleaseType(releaseType);
       releaseTaskRecord.setProposal(proposal);
       releaseTaskRecord.setTitle(title);
@@ -72,13 +72,13 @@ public class ReleaseTaskServiceImpl implements ReleaseTaskService {
   public boolean manageNewTask(int id, byte status, String releaseRemark) throws Exception {
     return jooq.transactionResult(configuration -> {
       ReleaseTaskRecord releaseTaskRecord = jooq.newRecord(RELEASE_TASK);
-      releaseTaskRecord.setId(id);
+      releaseTaskRecord = releaseTaskDAO.queryById(id);
       releaseTaskRecord.setStatus(status);
       releaseTaskRecord.setReleaseRemark(releaseRemark);
       boolean resultMangeNewTask = releaseTaskDAO.doUpdate(releaseTaskRecord, configuration);
-      if(resultMangeNewTask){
+      if (resultMangeNewTask) {
         return true;
-      }else {
+      } else {
         throw new RuntimeException("manage failed");
       }
     });

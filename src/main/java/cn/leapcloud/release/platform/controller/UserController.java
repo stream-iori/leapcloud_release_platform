@@ -7,6 +7,7 @@ import io.vertx.core.json.JsonObject;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import io.vertx.ext.web.Router;
+import io.vertx.ext.web.Session;
 
 import javax.inject.Inject;
 
@@ -50,9 +51,8 @@ public class UserController {
         boolean result = userService.login(username, password);
         if (result) {
           //3. 设置session
-
-          routingContext.session().put("userInfo", new JsonObject().put("name", username));
-
+          Session session = routingContext.session().put("userInfo", new JsonObject().put("name", username));
+          routingContext.setSession(session);
           response.setStatusCode(200).setStatusMessage("login success.").end();
         } else {
           response.setStatusCode(400).setStatusMessage("password incorrect").end();

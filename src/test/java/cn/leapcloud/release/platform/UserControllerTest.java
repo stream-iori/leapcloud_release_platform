@@ -2,6 +2,7 @@ package cn.leapcloud.release.platform;
 
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
+import io.vertx.core.http.HttpClientResponse;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
@@ -37,6 +38,23 @@ public class UserControllerTest {
 
     rule.vertx().deployVerticle(new Starter(), asyncResultHandler);
   }
+
+  @Test
+  public void login1(TestContext context) {
+    Async async = context.async();
+    JsonObject body = new JsonObject().put("username", "stream").put("password", "123");
+
+    rule.vertx().createHttpClient().post(8888, "localhost", "/login", new Handler<HttpClientResponse>() {
+      @Override
+      public void handle(HttpClientResponse httpClientResponse) {
+        httpClientResponse.exceptionHandler(context::fail);
+        context.assertEquals(200, httpClientResponse.statusCode());
+        async.complete();
+      }
+    }).putHeader("Content-Type", "application/json").end(body.encode());
+
+  }
+
 
   @Test
   public void login(TestContext context) {
