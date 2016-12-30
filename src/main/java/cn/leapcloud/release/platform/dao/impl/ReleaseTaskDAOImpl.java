@@ -5,11 +5,13 @@ import cn.leapcloud.release.platform.dao.entity.tables.records.ReleaseTaskRecord
 import com.google.inject.Inject;
 import org.jooq.Configuration;
 import org.jooq.DSLContext;
+import org.jooq.Field;
 import org.jooq.impl.DSL;
 
 import java.util.List;
 
 import static cn.leapcloud.release.platform.dao.entity.tables.ReleaseTask.RELEASE_TASK;
+import static org.jooq.impl.DSL.count;
 
 /**
  * Created by songqian on 16/11/25.
@@ -38,6 +40,8 @@ public class ReleaseTaskDAOImpl implements ReleaseTaskDAO {
       .set(RELEASE_TASK.RELEASE_TYPE, releaseTaskRecord.getReleaseType())
       .set(RELEASE_TASK.STATUS, releaseTaskRecord.getStatus())
       .execute();
+
+
     return effectRow > 0;
   }
 
@@ -65,10 +69,20 @@ public class ReleaseTaskDAOImpl implements ReleaseTaskDAO {
     return jooq.selectFrom(RELEASE_TASK)
       .where(RELEASE_TASK.ID.equal(id))
       .fetchOne();
+
+
   }
 
   @Override
-  public List<ReleaseTaskRecord> query() throws Exception {
-    return jooq.selectFrom(RELEASE_TASK).fetch();
+  public TaskRecordWithCount query(int pageSize, int currentPaged) throws Exception {
+    Field<Integer> cf = count();
+    Integer count = jooq.select(cf).from(RELEASE_TASK).fetchOne(cf);
+
+    int offset = (currentPaged - 1) * pageSize;
+    List<ReleaseTaskRecord> records = jooq.selectFrom(RELEASE_TASK).limit(offset, pageSize).fetch();
+
+    return new TaskRecordWithCount(count, records);
   }
+
+
 }

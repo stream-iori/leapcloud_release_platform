@@ -111,15 +111,24 @@ public class ReleaseTaskController {
 
 
   public void searchNewTask() {
-    router.get("/alltask").handler(routingContext -> {
+    router.get("/alltask/:pagesize/:currentpaged").handler(routingContext -> {
       try {
+
+        int pagesize = Integer.valueOf(routingContext.pathParam("pagesize"));
+        int currentpaged = Integer.valueOf(routingContext.pathParam("currentpaged"));
+
+
         JsonArray tasks = new JsonArray();
-        List<ReleaseTask> releaseTasks = releaseTaskService.queryAll();
+        List<ReleaseTask> releaseTasks = releaseTaskService.queryAll(pagesize, currentpaged).getReleaseTasks();
+        int totalCount = releaseTaskService.queryAll(pagesize, currentpaged).getTotalCount();
+
         for (ReleaseTask releaseTask : releaseTasks) {
           JsonObject task = releaseTask.toJson();
           tasks.add(task);
         }
         routingContext.response().end(tasks.encode());
+
+
       } catch (Exception e) {
         e.printStackTrace();
       }
