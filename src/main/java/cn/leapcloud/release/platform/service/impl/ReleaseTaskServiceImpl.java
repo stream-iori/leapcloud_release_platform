@@ -54,7 +54,7 @@ public class ReleaseTaskServiceImpl implements ReleaseTaskService {
   public boolean updateNewTask(int id, int releaseType, String proposal, String title, String projectURL, String projectDescription) throws Exception {
     return jooq.transactionResult(configuration -> {
       ReleaseTaskRecord releaseTaskRecord = jooq.newRecord(RELEASE_TASK);
-      releaseTaskRecord.setId(id);
+      releaseTaskRecord = releaseTaskDAO.queryById(id);
       releaseTaskRecord.setReleaseType(releaseType);
       releaseTaskRecord.setProposal(proposal);
       releaseTaskRecord.setTitle(title);
@@ -70,21 +70,22 @@ public class ReleaseTaskServiceImpl implements ReleaseTaskService {
   }
 
   @Override
-  public TaskWithCount queryAll(int pageSize, int currentPaged) throws Exception {
-
-    List<ReleaseTask> releaseTasks = new ArrayList<>();
-    List<ReleaseTaskRecord> releaseTaskRecords = releaseTaskDAO.query(pageSize, currentPaged).getRecords();
-    int totalCountUp = releaseTaskDAO.query(pageSize, currentPaged).getTotalCount();
-
-    ReleaseTask.Builder builder = new ReleaseTask.Builder();
-
-    for (ReleaseTaskRecord releaseTaskRecord : releaseTaskRecords) {
-      ReleaseTask releaseTask = convertEntityToDomain(builder, releaseTaskRecord);
-      releaseTasks.add(releaseTask);
-    }
-
-    return new TaskWithCount(totalCountUp, releaseTasks);
+  public boolean manageNewTask(int id, byte status, String releaseRemark) throws Exception {
+    return jooq.transactionResult(configuration -> {
+      ReleaseTaskRecord releaseTaskRecord = jooq.newRecord(RELEASE_TASK);
+      releaseTaskRecord = releaseTaskDAO.queryById(id);
+      releaseTaskRecord.setStatus(status);
+      releaseTaskRecord.setReleaseRemark(releaseRemark);
+      boolean resultMangeNewTask = releaseTaskDAO.doUpdate(releaseTaskRecord, configuration);
+      if (resultMangeNewTask) {
+        return true;
+      } else {
+        throw new RuntimeException("manage failed");
+      }
+    });
   }
+
+
 
   private ReleaseTask convertEntityToDomain(ReleaseTask.Builder builder, ReleaseTaskRecord releaseTaskRecord) {
     builder.proposal(releaseTaskRecord.getProposal());

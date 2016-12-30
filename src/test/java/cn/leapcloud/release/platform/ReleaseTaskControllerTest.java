@@ -53,7 +53,7 @@ public class ReleaseTaskControllerTest {
   @Test
   public void update(TestContext context) {
     Async async = context.async();
-    JsonObject body = new JsonObject().put("id", 2).put("releaseType", 1).put("proposal", "stream").put("title", "www")
+    JsonObject body = new JsonObject().put("id", 12).put("releaseType", 2).put("proposal", "stream").put("title", "www")
       .put("projectURL", "www").put("projectDescription", "www");
 
     rule.vertx().createHttpClient().put(8888, "localhost", "/changetask", httpClientResponse -> {
@@ -63,5 +63,28 @@ public class ReleaseTaskControllerTest {
     }).putHeader("Content-Type", "application/json")
       .end(body.encode());
   }
+
+
+  @Test
+
+  public void disposal(TestContext context) {
+    Async async = context.async();
+    JsonObject body = new JsonObject().put("username", "stream").put("password", "123");
+    JsonObject body1 = new JsonObject().put("id", 17).put("status", 1).put("releaseRemark", "hello");
+
+    rule.vertx().createHttpClient().post(8888, "localhost", "/login", loginResponse -> {
+      loginResponse.exceptionHandler(context::fail);
+      context.assertEquals(200, loginResponse.statusCode());
+
+      rule.vertx().createHttpClient().put(8888, "localhost", "/disposaltask", disposalResponse -> {
+        disposalResponse.exceptionHandler(context::fail);
+        context.assertEquals(200, disposalResponse.statusCode());
+        async.complete();
+      }).putHeader("Content-Type", "application/json").end(body1.encode());
+
+    }).putHeader("Content-Type", "application/json").end(body.encode());
+
+  }
+
 }
 
