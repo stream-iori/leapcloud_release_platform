@@ -47,7 +47,12 @@ public class UserController {
           return;
         }
 
-        //2. 执行登录
+        if (!userService.isUserExist(username)) {
+          response.setStatusCode(400).setStatusMessage("username no existence").end();
+          return;
+        }
+
+
         boolean result = userService.login(username, password);
         if (result) {
           //3. 设置session
@@ -57,9 +62,26 @@ public class UserController {
         } else {
           response.setStatusCode(400).setStatusMessage("password incorrect").end();
         }
+
       }).exceptionHandler(ex -> {
         logger.error("登录错误", ex);
         routingContext.response().setStatusCode(500).setStatusMessage(ex.getMessage()).end();
       }));
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

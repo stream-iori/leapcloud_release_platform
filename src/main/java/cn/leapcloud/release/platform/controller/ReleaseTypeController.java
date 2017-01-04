@@ -24,13 +24,13 @@ public class ReleaseTypeController {
   }
 
   public void searchType() {
-    router.get("/alltype").handler(routingContext -> {
+    router.get("/types").handler(routingContext -> {
       //验证是否已经登录
-      JsonObject userInfo = routingContext.session().get("userInfo");
-      if (userInfo == null || userInfo.getString("name") == null) {
-        routingContext.response().setStatusCode(401).setStatusMessage("authentication failed, please login.").end();
-        return;
-      }
+//      JsonObject userInfo = routingContext.session().get("userInfo");
+//      if (userInfo == null || userInfo.getString("name") == null) {
+//        routingContext.response().setStatusCode(401).setStatusMessage("authentication failed, please login.").end();
+//        return;
+//      }
 
       try {
         JsonArray types = new JsonArray();

@@ -24,7 +24,7 @@ public class RestfulServer {
   }
 
   public void start() {
-    httpServer.listen(8888, event -> {
+    httpServer.listen(8888, "0.0.0.0", event -> {
       if (event.succeeded()) {
         logger.info("rest service start success on port 8888");
       } else {
