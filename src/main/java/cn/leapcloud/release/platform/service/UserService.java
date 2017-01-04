@@ -21,4 +21,7 @@ public interface UserService {
    */
   boolean login(String username, String password) throws RuntimeException;
 
+
+  boolean isUserExist(String username) throws RuntimeException;
+
 }
