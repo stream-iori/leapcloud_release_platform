@@ -5,6 +5,7 @@ import cn.leapcloud.release.platform.dao.entity.tables.records.ReleaseTaskRecord
 import cn.leapcloud.release.platform.dao.impl.TaskWithCount;
 import cn.leapcloud.release.platform.service.ReleaseTaskService;
 import cn.leapcloud.release.platform.service.domain.ReleaseTask;
+import cn.leapcloud.release.platform.service.domain.Status;
 import com.google.inject.Inject;
 import org.jooq.DSLContext;
 
@@ -53,6 +54,8 @@ public class ReleaseTaskServiceImpl implements ReleaseTaskService {
 
   public boolean updateNewTask(int id, int releaseType, String proposal, String title, String projectURL, String projectDescription) throws Exception {
     return jooq.transactionResult(configuration -> {
+
+      Timestamp now = new Timestamp(System.currentTimeMillis());
       ReleaseTaskRecord releaseTaskRecord = jooq.newRecord(RELEASE_TASK);
       releaseTaskRecord = releaseTaskDAO.queryById(id);
       releaseTaskRecord.setReleaseType(releaseType);
@@ -60,6 +63,7 @@ public class ReleaseTaskServiceImpl implements ReleaseTaskService {
       releaseTaskRecord.setTitle(title);
       releaseTaskRecord.setProjectLocation(projectURL);
       releaseTaskRecord.setProjectDesc(projectDescription);
+      releaseTaskRecord.setUpdateTime(now);
       boolean resultUpdateNewTask = releaseTaskDAO.doUpdate(releaseTaskRecord, configuration);
       if (resultUpdateNewTask) {
         return true;
@@ -104,15 +108,13 @@ public class ReleaseTaskServiceImpl implements ReleaseTaskService {
   }
 
 
-
-
   private ReleaseTask convertEntityToDomain(ReleaseTask.Builder builder, ReleaseTaskRecord releaseTaskRecord) {
     builder.proposal(releaseTaskRecord.getProposal());
     builder.title(releaseTaskRecord.getTitle());
     builder.id(releaseTaskRecord.getId());
-    builder.projectDesc(releaseTaskRecord.getProposal());
+    builder.projectDesc(releaseTaskRecord.getProjectDesc());
     builder.projectLocation(releaseTaskRecord.getProjectLocation());
-    builder.releaseRemark(releaseTaskRecord.getReleaseRemark());
+    builder.status(Status.getByOrdinal(releaseTaskRecord.getStatus()));
     builder.proposalTime(releaseTaskRecord.getProposalTime());
     builder.releaseType(releaseTaskRecord.getReleaseType());
     builder.updateTime(releaseTaskRecord.getUpdateTime());

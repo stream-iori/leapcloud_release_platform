@@ -3,6 +3,7 @@ package cn.leapcloud.release.platform.controller;
 import cn.leapcloud.release.platform.service.ReleaseTaskService;
 import cn.leapcloud.release.platform.service.domain.ReleaseTask;
 import com.google.inject.Inject;
+import io.vertx.core.MultiMap;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
@@ -44,9 +45,9 @@ public class ReleaseTaskController {
         try {
           boolean result = releaseTaskService.createNewTask(releaseType, proposal, title, projectURL, projectDescription);
           if (result) {
-            routingContext.response().end("insert succeed");
+            routingContext.response().setStatusCode(200).end("insert succeed");
           } else {
-            routingContext.response().end("insert failed");
+            routingContext.response().setStatusCode(400).end("insert failed");
           }
         } catch (Exception e) {
           e.printStackTrace();
@@ -55,8 +56,9 @@ public class ReleaseTaskController {
     });
   }
 
+
   public void freshNewTask() {
-    router.put("/changetask").consumes("application/json").handler(routingContext -> {
+    router.put("/task").consumes("application/json").handler(routingContext -> {
       routingContext.request().bodyHandler(buffer -> {
         JsonObject jsonObject = buffer.toJsonObject();
         int id = jsonObject.getInteger("id");
@@ -68,9 +70,9 @@ public class ReleaseTaskController {
         try {
           boolean result = releaseTaskService.updateNewTask(id, releaseType, proposal, title, projectURL, projectDescription);
           if (result) {
-            routingContext.response().end("update succeed");
+            routingContext.response().setStatusCode(200).end("update succeed");
           } else {
-            routingContext.response().end("update failed");
+            routingContext.response().setStatusCode(400).end("update failed");
           }
         } catch (Exception e) {
           e.printStackTrace();
@@ -110,23 +112,28 @@ public class ReleaseTaskController {
 
 
   public void searchNewTask() {
-    router.get("/alltask/:pagesize/:currentpaged").handler(routingContext -> {
+    router.get("/tasks").handler(routingContext -> {
       try {
+        MultiMap queryParams = routingContext.request().params();
+        int pagesize = Integer.valueOf(queryParams.get("pageSize"));
+        int currentpaged = Integer.valueOf(queryParams.get("currentPage"));
 
-        int pagesize = Integer.valueOf(routingContext.pathParam("pagesize"));
-        int currentpaged = Integer.valueOf(routingContext.pathParam("currentpaged"));
 
+        JsonObject tasks = new JsonObject();
 
-        JsonArray tasks = new JsonArray();
+        JsonArray items = new JsonArray();
         List<ReleaseTask> releaseTasks = releaseTaskService.queryAll(pagesize, currentpaged).getReleaseTasks();
-        int totalCount = releaseTaskService.queryAll(pagesize, currentpaged).getTotalCount();
+        int total = releaseTaskService.queryAll(pagesize, currentpaged).getTotalCount();
 
         for (ReleaseTask releaseTask : releaseTasks) {
           JsonObject task = releaseTask.toJson();
-          tasks.add(task);
+          items.add(task);
         }
-        routingContext.response().end(tasks.encode());
 
+        tasks
+          .put("total", total)
+          .put("items", items);
+        routingContext.response().end(tasks.encode());
 
       } catch (Exception e) {
         e.printStackTrace();
