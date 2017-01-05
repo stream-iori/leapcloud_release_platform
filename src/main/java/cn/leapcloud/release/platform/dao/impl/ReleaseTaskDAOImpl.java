@@ -75,14 +75,13 @@ public class ReleaseTaskDAOImpl implements ReleaseTaskDAO {
 
   @Override
   public TaskRecordWithCount query(int pageSize, int currentPaged) throws Exception {
+    //获得总条目数
     Field<Integer> cf = count();
     Integer count = jooq.select(cf).from(RELEASE_TASK).fetchOne(cf);
-
+    //获得总页数
+    int page = (int) Math.ceil((double) count / pageSize);
     int offset = (currentPaged - 1) * pageSize;
     List<ReleaseTaskRecord> records = jooq.selectFrom(RELEASE_TASK).limit(offset, pageSize).fetch();
-
     return new TaskRecordWithCount(count, records);
   }
-
-
 }

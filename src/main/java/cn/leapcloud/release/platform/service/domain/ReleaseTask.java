@@ -64,12 +64,12 @@ public class ReleaseTask {
     jsonObject.put("id", id);
     jsonObject.put("releaseType", releaseType);
     jsonObject.put("title", title);
-    jsonObject.put("projectLocation", projectDesc);
+    jsonObject.put("projectURL", projectLocation);
     jsonObject.put("projectDescription", projectDesc);
     jsonObject.put("proposal", proposal);
     jsonObject.put("proposalTime", proposalTime.toString());
     jsonObject.put("updateTime", updateTime.toString());
-    jsonObject.put("status", status);
+    jsonObject.put("status", status.ordinal());
     jsonObject.put("releaseRemark", releaseRemark);
     return jsonObject;
   }
