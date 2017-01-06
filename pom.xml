@@ -14,6 +14,11 @@
   <artifactId>release-platform</artifactId>
   <version>0.1.0-SNAPSHOT</version>
 
+  <properties>
+
+
+  </properties>
+
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -83,48 +88,52 @@
         </executions>
       </plugin>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>2.19.1</version>
-        <configuration>
-          <systemPropertyVariables>
-            <jacoco-agent.destfile>target/jacoco.exec</jacoco-agent.destfile>
-          </systemPropertyVariables>
-        </configuration>
-      </plugin>
-      <plugin>
         <groupId>org.jacoco</groupId>
         <artifactId>jacoco-maven-plugin</artifactId>
         <version>0.7.8</version>
         <executions>
           <execution>
-            <id>default-instrument</id>
+            <!--
+            在maven的initialize阶段，将Jacoco的runtime agent作为VM的一个参数
+            传给被测程序，用于监控JVM中的调用。
+            -->
+            <id>default-prepare-agent</id>
             <goals>
-              <goal>instrument</goal>
+              <goal>prepare-agent</goal>
             </goals>
+            <configuration>
+              <destFile>
+                ${project.build.directory}/coverage-reports/jacoco.exec
+              </destFile>
+              <propertyName>surefireArgLine</propertyName>
+            </configuration>
           </execution>
-          <execution>
-            <id>default-restore-instrumented-classes</id>
-            <goals>
-              <goal>restore-instrumented-classes</goal>
-            </goals>
-          </execution>
+          <!--
+          在程序的verify阶段，执行report测试的程序。
+          文件的输入为perpare-agent阶段中设置或者默认的jacoco.exec.
+          参数 includes和excludes可用来选定report中过滤的类。
+          -->
           <execution>
             <id>default-report</id>
-            <phase>prepare-package</phase>
+            <phase>test</phase>
             <goals>
               <goal>report</goal>
             </goals>
-          </execution>
-          <execution>
-            <id>default-check</id>
-            <goals>
-              <goal>check</goal>
-            </goals>
+            <configuration>
+              <dataFile>${project.build.directory}/coverage-reports/jacoco.exec</dataFile>
+              <outputDirectory>${project.reporting.outputDirectory}/jacoco</outputDirectory>
+            </configuration>
           </execution>
         </executions>
       </plugin>
-
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.19.1</version>
+        <configuration>
+          <argLine>@{surefireArgLine}</argLine>
+        </configuration>
+      </plugin>
       <plugin>
         <groupId>com.spotify</groupId>
         <artifactId>docker-maven-plugin</artifactId>
