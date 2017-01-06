@@ -44,6 +44,7 @@ public class UserController {
       routingContext.response().setStatusCode(200).end();
     });
 
+
     router.post("/login").consumes("application/json").handler(routingContext ->
       routingContext.request().bodyHandler(bodyBuffer -> {
         JsonObject loginData = bodyBuffer.toJsonObject();

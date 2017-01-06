@@ -38,7 +38,7 @@ public class ReleaseTaskControllerTest {
   @Test
   public void insert(TestContext context) {
     Async async = context.async();
-    JsonObject body = new JsonObject().put("releaseType", 1).put("proposal", "www").put("title", "www")
+    JsonObject body = new JsonObject().put("releaseType", 3).put("proposal", "www").put("title", "www")
       .put("projectURL", "www").put("projectDescription", "www");
 
 
@@ -53,10 +53,11 @@ public class ReleaseTaskControllerTest {
   @Test
   public void update(TestContext context) {
     Async async = context.async();
-    JsonObject body = new JsonObject().put("id", 12).put("releaseType", 2).put("proposal", "stream").put("title", "www")
+
+    JsonObject body = new JsonObject().put("id", 74).put("releaseType", 2).put("proposal", "stream").put("title", "www")
       .put("projectURL", "www").put("projectDescription", "www");
 
-    rule.vertx().createHttpClient().put(8888, "localhost", "/changetask", httpClientResponse -> {
+    rule.vertx().createHttpClient().put(8888, "localhost", "/task", httpClientResponse -> {
       httpClientResponse.exceptionHandler(context::fail);
       context.assertEquals(200, httpClientResponse.statusCode());
       async.complete();
@@ -75,7 +76,7 @@ public class ReleaseTaskControllerTest {
       context.assertEquals(200, loginResponse.statusCode());
       //获取header里的cookie,后面要带着发给服务端
       String cookie = loginResponse.getHeader("Set-Cookie");
-      JsonObject taskBody = new JsonObject().put("id", 17).put("status", 1).put("releaseRemark", "hello");
+      JsonObject taskBody = new JsonObject().put("id", 75).put("status", 1).put("releaseRemark", "hello");
       rule.vertx().createHttpClient()
         .put(8888, "localhost", "/disposaltask", disposalResponse -> {
           disposalResponse.exceptionHandler(context::fail);

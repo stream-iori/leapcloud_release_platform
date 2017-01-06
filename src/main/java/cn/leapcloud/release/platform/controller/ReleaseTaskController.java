@@ -2,6 +2,7 @@ package cn.leapcloud.release.platform.controller;
 
 import cn.leapcloud.release.platform.service.ReleaseTaskService;
 import cn.leapcloud.release.platform.service.domain.ReleaseTask;
+import com.google.common.base.Strings;
 import com.google.inject.Inject;
 import io.vertx.core.MultiMap;
 import io.vertx.core.json.JsonArray;
@@ -36,12 +37,32 @@ public class ReleaseTaskController {
       routingContext.request().bodyHandler(buffer -> {
         JsonObject jsonObject = buffer.toJsonObject();
         int releaseType = jsonObject.getInteger("releaseType");
+
         String proposal = jsonObject.getString("proposal");
         String title = jsonObject.getString("title");
         String projectURL = jsonObject.getString("projectURL");
         String projectDescription = jsonObject.getString("projectDescription");
 
-
+        if (Strings.isNullOrEmpty(proposal)) {
+          routingContext.response().setStatusCode(400).setStatusMessage("username can not be empty").end();
+          return;
+        }
+        if (Strings.isNullOrEmpty(title)) {
+          routingContext.response().setStatusCode(400).setStatusMessage("title can not be empty").end();
+          return;
+        }
+        if (Strings.isNullOrEmpty(projectURL)) {
+          routingContext.response().setStatusCode(400).setStatusMessage("URL can not be empty").end();
+          return;
+        }
+        if (Strings.isNullOrEmpty(projectDescription)) {
+          routingContext.response().setStatusCode(400).setStatusMessage("description can not be empty").end();
+          return;
+        }
+        if (releaseType < 1 || releaseType > 3) {
+          routingContext.response().setStatusCode(400).setStatusMessage("style must be chosen").end();
+          return;
+        }
         try {
           boolean result = releaseTaskService.createNewTask(releaseType, proposal, title, projectURL, projectDescription);
           if (result) {

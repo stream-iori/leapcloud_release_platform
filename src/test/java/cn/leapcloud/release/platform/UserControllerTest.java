@@ -1,8 +1,5 @@
 package cn.leapcloud.release.platform;
 
-import io.vertx.core.AsyncResult;
-import io.vertx.core.Handler;
-import io.vertx.core.http.HttpClientResponse;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
@@ -28,44 +25,25 @@ public class UserControllerTest {
 
   @BeforeClass
   public static void before() {
-    Handler<AsyncResult<String>> asyncResultHandler = event -> {
+    rule.vertx().deployVerticle(new Starter(), event -> {
       if (event.succeeded()) {
         logger.info("deploy release-platform success");
       } else {
         logger.error("deploy release-platform failed.", event.cause());
       }
-    };
-
-    rule.vertx().deployVerticle(new Starter(), asyncResultHandler);
+    });
   }
-
-  @Test
-  public void login1(TestContext context) {
-    Async async = context.async();
-    JsonObject body = new JsonObject().put("username", "stream").put("password", "123");
-
-    rule.vertx().createHttpClient().post(8888, "localhost", "/login", new Handler<HttpClientResponse>() {
-      @Override
-      public void handle(HttpClientResponse httpClientResponse) {
-        httpClientResponse.exceptionHandler(context::fail);
-        context.assertEquals(200, httpClientResponse.statusCode());
-        async.complete();
-      }
-    }).putHeader("Content-Type", "application/json").end(body.encode());
-
-  }
-
 
   @Test
   public void login(TestContext context) {
     Async async = context.async();
     JsonObject body = new JsonObject().put("username", "stream").put("password", "123");
-
-    rule.vertx().createHttpClient().post(8888, "localhost", "/login", response -> {
-      response.exceptionHandler(ex -> context.fail(ex));
-      context.assertEquals(200, response.statusCode());
-      async.complete();
-    }).putHeader("Content-Type", "application/json").end(body.encode());
+    rule.vertx().setPeriodic(2000, t -> {
+      rule.vertx().createHttpClient().post(8888, "localhost", "/login", response -> {
+        response.exceptionHandler(context::fail);
+        context.assertEquals(200, response.statusCode());
+        async.complete();
+      }).putHeader("Content-Type", "application/json").end(body.encode());
 
 //
 //    Handler<HttpClientResponse> responseHandler = response -> {
@@ -80,5 +58,6 @@ public class UserControllerTest {
 //      .post(8888, "localhost", "/login", responseHandler)
 //      .putHeader("Content-Type", "application/json")
 //      .end(body.encode());
+    });
   }
 }
