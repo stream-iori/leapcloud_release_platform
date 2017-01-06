@@ -29,6 +29,15 @@ public class UserController {
   }
 
   private void initRouter() {
+    router.get("/isLogin").handler(routingContext -> {
+      String sessionID = routingContext.request().getHeader("vertx-web.session");
+      if (!Strings.isNullOrEmpty(sessionID) && sessionID.equals(routingContext.session().id())) {
+        routingContext.response().setStatusCode(200).end();
+      } else {
+        routingContext.response().setStatusCode(402).setStatusMessage("user doesn't login.").end();
+      }
+    });
+
     router.post("/login").consumes("application/json").handler(routingContext ->
       routingContext.request().bodyHandler(bodyBuffer -> {
         JsonObject loginData = bodyBuffer.toJsonObject();
@@ -57,8 +66,7 @@ public class UserController {
         if (result) {
           //3. 设置session
           Session session = routingContext.session().put("userInfo", new JsonObject().put("name", username));
-          routingContext.setSession(session);
-          response.setStatusCode(200).setStatusMessage("login success.").end();
+          response.setStatusCode(200).putHeader("vertx-web.session", session.id()).setStatusMessage("login success.").end();
         } else {
           response.setStatusCode(400).setStatusMessage("password incorrect").end();
         }
