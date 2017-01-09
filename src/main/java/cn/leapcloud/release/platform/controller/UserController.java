@@ -29,7 +29,7 @@ public class UserController {
   }
 
   private void initRouter() {
-    router.get("/isLogin").handler(routingContext -> {
+    router.get("/api/isLogin").handler(routingContext -> {
       String sessionID = routingContext.request().getHeader("vertx-web.session");
       if (!Strings.isNullOrEmpty(sessionID) && sessionID.equals(routingContext.session().id())) {
         routingContext.session().setAccessed();
@@ -39,13 +39,13 @@ public class UserController {
       }
     });
 
-    router.put("/logout").handler(routingContext -> {
+    router.put("/api/logout").handler(routingContext -> {
       routingContext.session().destroy();
       routingContext.response().setStatusCode(200).end();
     });
 
 
-    router.post("/login").consumes("application/json").handler(routingContext ->
+    router.post("/api/login").consumes("application/json").handler(routingContext ->
       routingContext.request().bodyHandler(bodyBuffer -> {
         JsonObject loginData = bodyBuffer.toJsonObject();
         HttpServerResponse response = routingContext.response();

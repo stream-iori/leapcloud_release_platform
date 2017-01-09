@@ -42,7 +42,7 @@ public class ReleaseTaskControllerTest {
       .put("projectURL", "www").put("projectDescription", "www");
 
 
-    rule.vertx().createHttpClient().post(8888, "localhost", "/task", httpClientResponse -> {
+    rule.vertx().createHttpClient().post(8888, "localhost", "/api/task", httpClientResponse -> {
       httpClientResponse.exceptionHandler(context::fail);
       context.assertEquals(200, httpClientResponse.statusCode());
       async.complete();
@@ -57,7 +57,7 @@ public class ReleaseTaskControllerTest {
     JsonObject body = new JsonObject().put("id", 74).put("releaseType", 2).put("proposal", "stream").put("title", "www")
       .put("projectURL", "www").put("projectDescription", "www");
 
-    rule.vertx().createHttpClient().put(8888, "localhost", "/task", httpClientResponse -> {
+    rule.vertx().createHttpClient().put(8888, "localhost", "/api/task", httpClientResponse -> {
       httpClientResponse.exceptionHandler(context::fail);
       context.assertEquals(200, httpClientResponse.statusCode());
       async.complete();
@@ -71,14 +71,14 @@ public class ReleaseTaskControllerTest {
     Async async = context.async();
     JsonObject loginBody = new JsonObject().put("username", "stream").put("password", "123");
 
-    rule.vertx().createHttpClient().post(8888, "localhost", "/login", loginResponse -> {
+    rule.vertx().createHttpClient().post(8888, "localhost", "/api/login", loginResponse -> {
       loginResponse.exceptionHandler(context::fail);
       context.assertEquals(200, loginResponse.statusCode());
       //获取header里的cookie,后面要带着发给服务端
       String cookie = loginResponse.getHeader("Set-Cookie");
-      JsonObject taskBody = new JsonObject().put("id", 75).put("status", 1).put("releaseRemark", "hello");
+      JsonObject taskBody = new JsonObject().put("id", 85).put("status", 1).put("releaseRemark", "hello");
       rule.vertx().createHttpClient()
-        .put(8888, "localhost", "/disposaltask", disposalResponse -> {
+        .put(8888, "localhost", "/api/disposaltask", disposalResponse -> {
           disposalResponse.exceptionHandler(context::fail);
           context.assertEquals(200, disposalResponse.statusCode());
           async.complete();
@@ -88,6 +88,43 @@ public class ReleaseTaskControllerTest {
     }).putHeader("Content-Type", "application/json").end(loginBody.encode());
 
   }
+
+  @Test
+  public void getWant(TestContext context){
+    Async async = context.async();
+
+    rule.vertx().setTimer(2000,v->{
+      rule.vertx().createHttpClient().get(8888,"localhost","/api/tasks?pageSize=2&currentPage=2",httpClientResponse -> {
+        httpClientResponse.exceptionHandler(context::fail);
+        context.assertEquals(200,httpClientResponse.statusCode());
+        async.complete();
+      }).end();
+    });
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }
 

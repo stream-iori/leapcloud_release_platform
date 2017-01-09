@@ -32,7 +32,7 @@ public class ReleaseTaskController {
   }
 
   public void insertNewTask() {
-    router.post("/task").consumes("application/json").handler(routingContext -> {
+    router.post("/api/task").consumes("application/json").handler(routingContext -> {
 
       routingContext.request().bodyHandler(buffer -> {
         JsonObject jsonObject = buffer.toJsonObject();
@@ -79,7 +79,7 @@ public class ReleaseTaskController {
 
 
   public void freshNewTask() {
-    router.put("/task").consumes("application/json").handler(routingContext -> {
+    router.put("/api/task").consumes("application/json").handler(routingContext -> {
       routingContext.request().bodyHandler(buffer -> {
         JsonObject jsonObject = buffer.toJsonObject();
         int id = jsonObject.getInteger("id");
@@ -103,7 +103,7 @@ public class ReleaseTaskController {
   }
 
   public void disposalTask() {
-    router.put("/disposaltask").consumes("application/json").handler(routingContext -> {
+    router.put("/api/disposaltask").consumes("application/json").handler(routingContext -> {
       JsonObject userInfo = routingContext.session().get("userInfo");
       if (userInfo == null || userInfo.getString("name") == null) {
         routingContext.response().setStatusCode(401).setStatusMessage("authentication failed,please login").end();
@@ -133,7 +133,7 @@ public class ReleaseTaskController {
 
 
   public void searchNewTask() {
-    router.get("/tasks").handler(routingContext -> {
+    router.get("/api/tasks").handler(routingContext -> {
       try {
         MultiMap queryParams = routingContext.request().params();
         int pagesize = Integer.valueOf(queryParams.get("pageSize"));

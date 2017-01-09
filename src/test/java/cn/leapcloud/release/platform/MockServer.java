@@ -1,14 +1,10 @@
 package cn.leapcloud.release.platform;
 
-import cn.leapcloud.release.platform.service.domain.ReleaseTask;
-import cn.leapcloud.release.platform.service.domain.Status;
 import io.vertx.core.Vertx;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import org.junit.Ignore;
 import org.junit.Test;
-
-import java.util.Date;
 
 /**
  * Created by stream.
@@ -34,15 +30,20 @@ public class MockServer {
   }
 
 
-  @Test
-  public void getJson() {
-    ReleaseTask releaseTask = new ReleaseTask.Builder()
-      .proposal("proposal")
-      .proposalTime(new Date(System.currentTimeMillis()))
-      .updateTime(new Date(System.currentTimeMillis()))
-      .status(Status.DONE)
-      .build();
-    System.out.println(releaseTask.toJson().encode());
-  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }
