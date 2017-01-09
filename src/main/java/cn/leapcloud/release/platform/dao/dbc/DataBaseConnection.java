@@ -1,6 +1,8 @@
 package cn.leapcloud.release.platform.dao.dbc;
 
+import com.google.inject.Inject;
 import com.zaxxer.hikari.HikariDataSource;
+import io.vertx.core.json.JsonObject;
 import org.jooq.*;
 import org.jooq.impl.DSL;
 import org.jooq.impl.DataSourceConnectionProvider;
@@ -21,14 +23,25 @@ public class DataBaseConnection {
   private static DSLContext jooq;
   private static HikariDataSource dataSource;
 
+  private static JsonObject mysqlConfig;
+
+  @Inject
+  public DataBaseConnection(JsonObject config) {
+    this.mysqlConfig = config.getJsonObject("mysql", new JsonObject()
+      .put("url", DBURL)
+      .put("user", DBUSER)
+      .put("password", DBPASS)
+    );
+  }
+
   public static DSLContext getJooq() {
     if (jooq == null) {
       try {
         //建立数据连接池
         dataSource = new HikariDataSource();
-        dataSource.setJdbcUrl(DBURL);
-        dataSource.setUsername(DBUSER);
-        dataSource.setPassword(DBPASS);
+        dataSource.setJdbcUrl(mysqlConfig.getString("url"));
+        dataSource.setUsername(mysqlConfig.getString("user"));
+        dataSource.setPassword(mysqlConfig.getString("password"));
         dataSource.setMaximumPoolSize(100);
         dataSource.setLoginTimeout(30);
         dataSource.setConnectionTimeout(10000);

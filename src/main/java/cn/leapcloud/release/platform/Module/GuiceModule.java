@@ -19,6 +19,7 @@ import cn.leapcloud.release.platform.service.impl.ReleaseTypeServiceImpl;
 import cn.leapcloud.release.platform.service.impl.UserServiceImpl;
 import com.google.inject.*;
 import io.vertx.core.Vertx;
+import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.CookieHandler;
 import io.vertx.ext.web.handler.SessionHandler;
@@ -31,9 +32,11 @@ import org.jooq.DSLContext;
 public class GuiceModule implements Module {
 
   private Vertx vertx;
+  private JsonObject config;
 
   public GuiceModule(Vertx vertx) {
     this.vertx = vertx;
+    this.config = vertx.fileSystem().readFileBlocking("./config.json").toJsonObject();
   }
 
   public void configure(Binder binder) {
@@ -64,6 +67,11 @@ public class GuiceModule implements Module {
   }
 
   @Provides
+  public JsonObject config() {
+    return this.config;
+  }
+
+  @Provides
   @Singleton
   public Router router() {
     Router router = Router.router(vertx);
@@ -71,7 +79,6 @@ public class GuiceModule implements Module {
     router.route().handler(SessionHandler.create(LocalSessionStore.create(vertx)));
     return router;
   }
-
 
 
 }
