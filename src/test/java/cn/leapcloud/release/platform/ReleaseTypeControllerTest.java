@@ -40,7 +40,7 @@ public class ReleaseTypeControllerTest {
     Async async = context.async();
 
     rule.vertx().setPeriodic(2000, v -> {
-      rule.vertx().createHttpClient().get(8888, "0.0.0.0", "/types", httpClientResponse -> {
+      rule.vertx().createHttpClient().get(8888, "0.0.0.0", "/api/types", httpClientResponse -> {
         httpClientResponse.exceptionHandler(context::fail);
         context.assertEquals(200, httpClientResponse.statusCode());
         httpClientResponse.bodyHandler(bodyBuffer -> {
