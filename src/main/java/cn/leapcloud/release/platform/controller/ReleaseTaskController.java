@@ -2,6 +2,7 @@ package cn.leapcloud.release.platform.controller;
 
 import cn.leapcloud.release.platform.service.ReleaseTaskService;
 import cn.leapcloud.release.platform.service.domain.ReleaseTask;
+import com.google.common.base.Strings;
 import com.google.inject.Inject;
 import io.vertx.core.MultiMap;
 import io.vertx.core.json.JsonArray;
@@ -31,17 +32,37 @@ public class ReleaseTaskController {
   }
 
   public void insertNewTask() {
-    router.post("/task").consumes("application/json").handler(routingContext -> {
+    router.post("/api/task").consumes("application/json").handler(routingContext -> {
 
       routingContext.request().bodyHandler(buffer -> {
         JsonObject jsonObject = buffer.toJsonObject();
         int releaseType = jsonObject.getInteger("releaseType");
+
         String proposal = jsonObject.getString("proposal");
         String title = jsonObject.getString("title");
         String projectURL = jsonObject.getString("projectURL");
         String projectDescription = jsonObject.getString("projectDescription");
 
-
+        if (Strings.isNullOrEmpty(proposal)) {
+          routingContext.response().setStatusCode(400).setStatusMessage("username can not be empty").end();
+          return;
+        }
+        if (Strings.isNullOrEmpty(title)) {
+          routingContext.response().setStatusCode(400).setStatusMessage("title can not be empty").end();
+          return;
+        }
+        if (Strings.isNullOrEmpty(projectURL)) {
+          routingContext.response().setStatusCode(400).setStatusMessage("URL can not be empty").end();
+          return;
+        }
+        if (Strings.isNullOrEmpty(projectDescription)) {
+          routingContext.response().setStatusCode(400).setStatusMessage("description can not be empty").end();
+          return;
+        }
+        if (releaseType < 1 || releaseType > 3) {
+          routingContext.response().setStatusCode(400).setStatusMessage("style must be chosen").end();
+          return;
+        }
         try {
           boolean result = releaseTaskService.createNewTask(releaseType, proposal, title, projectURL, projectDescription);
           if (result) {
@@ -58,7 +79,7 @@ public class ReleaseTaskController {
 
 
   public void freshNewTask() {
-    router.put("/task").consumes("application/json").handler(routingContext -> {
+    router.put("/api/task").consumes("application/json").handler(routingContext -> {
       routingContext.request().bodyHandler(buffer -> {
         JsonObject jsonObject = buffer.toJsonObject();
         int id = jsonObject.getInteger("id");
@@ -82,7 +103,7 @@ public class ReleaseTaskController {
   }
 
   public void disposalTask() {
-    router.put("/disposaltask").consumes("application/json").handler(routingContext -> {
+    router.put("/api/disposaltask").consumes("application/json").handler(routingContext -> {
       JsonObject userInfo = routingContext.session().get("userInfo");
       if (userInfo == null || userInfo.getString("name") == null) {
         routingContext.response().setStatusCode(401).setStatusMessage("authentication failed,please login").end();
@@ -112,7 +133,7 @@ public class ReleaseTaskController {
 
 
   public void searchNewTask() {
-    router.get("/tasks").handler(routingContext -> {
+    router.get("/api/tasks").handler(routingContext -> {
       try {
         MultiMap queryParams = routingContext.request().params();
         int pagesize = Integer.valueOf(queryParams.get("pageSize"));

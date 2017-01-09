@@ -1,12 +1,10 @@
 package cn.leapcloud.release.platform;
 
-import cn.leapcloud.release.platform.service.domain.ReleaseTask;
 import io.vertx.core.Vertx;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
+import org.junit.Ignore;
 import org.junit.Test;
-
-import java.util.Date;
 
 /**
  * Created by stream.
@@ -15,6 +13,7 @@ public class MockServer {
 
   private static final Logger logger = LoggerFactory.getLogger(MockServer.class);
 
+  @Ignore
   @Test
   public void mockMain() throws InterruptedException {
     Vertx vertx = Vertx.vertx();
@@ -31,14 +30,20 @@ public class MockServer {
   }
 
 
-  @Test
-  public void getJson() {
-    ReleaseTask releaseTask = new ReleaseTask.Builder()
-      .proposal("proposal")
-      .proposalTime(new Date(System.currentTimeMillis()))
-      .updateTime(new Date())
-      .build();
-    System.out.println(releaseTask.toJson().encode());
-  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }
