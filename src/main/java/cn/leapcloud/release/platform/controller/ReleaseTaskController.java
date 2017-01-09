@@ -135,16 +135,19 @@ public class ReleaseTaskController {
   public void searchNewTask() {
     router.get("/api/tasks").handler(routingContext -> {
       try {
-        MultiMap queryParams = routingContext.request().params();
-        int pagesize = Integer.valueOf(queryParams.get("pageSize"));
-        int currentpaged = Integer.valueOf(queryParams.get("currentPage"));
 
+        MultiMap queryParams = routingContext.request().params();
+        String pageSizeStr = queryParams.get("pageSize");
+        String currentPageStr = queryParams.get("currentPage");
+
+        int pageSize = pageSizeStr == null ? 5 : Integer.valueOf(pageSizeStr);
+        int currentPage = currentPageStr == null ? 1 : Integer.valueOf(currentPageStr);
 
         JsonObject tasks = new JsonObject();
 
         JsonArray items = new JsonArray();
-        List<ReleaseTask> releaseTasks = releaseTaskService.queryAll(pagesize, currentpaged).getReleaseTasks();
-        int total = releaseTaskService.queryAll(pagesize, currentpaged).getTotalCount();
+        List<ReleaseTask> releaseTasks = releaseTaskService.queryAll(pageSize, currentPage).getReleaseTasks();
+        int total = releaseTaskService.queryAll(pageSize, currentPage).getTotalCount();
 
         for (ReleaseTask releaseTask : releaseTasks) {
           JsonObject task = releaseTask.toJson();
