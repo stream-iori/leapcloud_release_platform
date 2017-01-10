@@ -27,7 +27,7 @@ public class DataBaseConnection {
 
   @Inject
   public DataBaseConnection(JsonObject config) {
-    this.mysqlConfig = config.getJsonObject("mysql", new JsonObject()
+    mysqlConfig = config.getJsonObject("mysql", new JsonObject()
       .put("url", DBURL)
       .put("user", DBUSER)
       .put("password", DBPASS)
