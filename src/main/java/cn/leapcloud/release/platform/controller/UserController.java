@@ -30,12 +30,11 @@ public class UserController {
 
   private void initRouter() {
     router.get("/api/isLogin").handler(routingContext -> {
-      String sessionID = routingContext.request().getHeader("vertx-web.session");
-      if (!Strings.isNullOrEmpty(sessionID) && sessionID.equals(routingContext.session().id())) {
-        routingContext.session().setAccessed();
-        routingContext.response().setStatusCode(200).end();
-      } else {
+      JsonObject userInfo = routingContext.session().get("userInfo");
+      if (userInfo == null || userInfo.getString("name") == null) {
         routingContext.response().setStatusCode(402).setStatusMessage("user doesn't login.").end();
+      } else {
+        routingContext.response().setStatusCode(200).end();
       }
     });
 
