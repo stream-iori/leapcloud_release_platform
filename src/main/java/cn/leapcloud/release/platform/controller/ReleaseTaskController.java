@@ -103,7 +103,7 @@ public class ReleaseTaskController {
   }
 
   public void disposalTask() {
-    router.put("/api/disposaltask").consumes("application/json").handler(routingContext -> {
+    router.put("/api/task/operate").consumes("application/json").handler(routingContext -> {
       JsonObject userInfo = routingContext.session().get("userInfo");
       if (userInfo == null || userInfo.getString("name") == null) {
         routingContext.response().setStatusCode(401).setStatusMessage("authentication failed,please login").end();
