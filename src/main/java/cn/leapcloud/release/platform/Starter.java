@@ -5,6 +5,7 @@ import cn.leapcloud.release.platform.controller.RestfulServer;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import io.vertx.core.AbstractVerticle;
+import io.vertx.core.json.JsonObject;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 
@@ -16,10 +17,10 @@ public class Starter extends AbstractVerticle {
   private static final Logger logger = LoggerFactory.getLogger(Starter.class);
   private RestfulServer restfulServer;
 
-
   @Override
   public void start() throws Exception {
-    Injector injector = Guice.createInjector(new GuiceModule(vertx));
+    JsonObject config = vertx.fileSystem().readFileBlocking("./config.json").toJsonObject();
+    Injector injector = Guice.createInjector(new GuiceModule(vertx, config));
     restfulServer = injector.getInstance(RestfulServer.class);
     restfulServer.start();
   }

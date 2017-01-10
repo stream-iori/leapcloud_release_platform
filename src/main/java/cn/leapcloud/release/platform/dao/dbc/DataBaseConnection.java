@@ -15,26 +15,18 @@ import java.sql.SQLException;
  * Created by songqian on 16/9/24.
  */
 public class DataBaseConnection {
-  private static final String DBURL = "jdbc:mysql://localhost:" +
-    "3306/leapcloud_release_platform?useUnicode=true&characterEncoding=UTF-8&useSSL=false";
-  private static final String DBUSER = "root";
-  private static final String DBPASS = "root";
 
-  private static DSLContext jooq;
-  private static HikariDataSource dataSource;
+  private DSLContext jooq;
+  private HikariDataSource dataSource;
 
-  private static JsonObject mysqlConfig;
+  private JsonObject mysqlConfig;
 
   @Inject
   public DataBaseConnection(JsonObject config) {
-    mysqlConfig = config.getJsonObject("mysql", new JsonObject()
-      .put("url", DBURL)
-      .put("user", DBUSER)
-      .put("password", DBPASS)
-    );
+    mysqlConfig = config.getJsonObject("mysql");
   }
 
-  public static DSLContext getJooq() {
+  public DSLContext getJooq() {
     if (jooq == null) {
       try {
         //建立数据连接池
@@ -62,7 +54,7 @@ public class DataBaseConnection {
     return jooq;
   }
 
-  public static void close() {
+  public void close() {
     jooq.close();
     dataSource.close();
   }

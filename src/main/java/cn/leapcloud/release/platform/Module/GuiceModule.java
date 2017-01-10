@@ -34,9 +34,9 @@ public class GuiceModule implements Module {
   private Vertx vertx;
   private JsonObject config;
 
-  public GuiceModule(Vertx vertx) {
+  public GuiceModule(Vertx vertx, JsonObject config) {
     this.vertx = vertx;
-    this.config = vertx.fileSystem().readFileBlocking("./config.json").toJsonObject();
+    this.config = config;
   }
 
   public void configure(Binder binder) {
@@ -57,8 +57,9 @@ public class GuiceModule implements Module {
   }
 
   @Provides
+  @Singleton
   public DSLContext jooq() {
-    return DataBaseConnection.getJooq();
+    return new DataBaseConnection(config).getJooq();
   }
 
   @Provides
