@@ -1,0 +1,8 @@
+{
+  "mysql": {
+    "url": "jdbc:mysql://localhost:3306/leapcloud_release_platform?useUnicode=true&characterEncoding=UTF-8&useSSL=false",
+    "user": "root",
+    "password": "root"
+  },
+  "httpPort": 8888
+}
