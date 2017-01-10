@@ -69,7 +69,7 @@ public class ReleaseTaskControllerTest extends Base {
       String cookie = loginResponse.getHeader("Set-Cookie");
       JsonObject taskBody = new JsonObject().put("id", 85).put("status", 1).put("releaseRemark", "hello");
       vertx.createHttpClient()
-        .put(8888, "localhost", "/api/disposaltask", disposalResponse -> {
+        .put(8888, "localhost", "/api/task/operate", disposalResponse -> {
           disposalResponse.exceptionHandler(context::fail);
           context.assertEquals(200, disposalResponse.statusCode());
           async.complete();

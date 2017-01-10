@@ -4,5 +4,5 @@
     "user": "${config.mysql.jdbc.user}",
     "password": "${config.mysql.jdbc.password}"
   },
-  "httpPort" : "${config.httpPort}"
+  "httpPort" : ${config.httpPort}
 }
