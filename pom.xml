@@ -206,7 +206,7 @@
             ]]>
         </config.log4j2.appenderRefs>
         <!--UAT环境配置文件变量-->
-        <config.httpPort>8080</config.httpPort>
+        <config.httpPort>8888</config.httpPort>
         <config.mysql.jdbc.url>
           jdbc:mysql://10.10.10.183:3306/leapcloud_release_platform?useUnicode=true&amp;characterEncoding=UTF-8&amp;useSSL=false
         </config.mysql.jdbc.url>

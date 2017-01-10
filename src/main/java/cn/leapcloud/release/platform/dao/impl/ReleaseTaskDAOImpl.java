@@ -2,12 +2,12 @@ package cn.leapcloud.release.platform.dao.impl;
 
 import cn.leapcloud.release.platform.dao.ReleaseTaskDAO;
 import cn.leapcloud.release.platform.dao.entity.tables.records.ReleaseTaskRecord;
-import com.google.inject.Inject;
 import org.jooq.Configuration;
 import org.jooq.DSLContext;
 import org.jooq.Field;
 import org.jooq.impl.DSL;
 
+import javax.inject.Inject;
 import java.util.List;
 
 import static cn.leapcloud.release.platform.dao.entity.tables.ReleaseTask.RELEASE_TASK;
@@ -17,8 +17,6 @@ import static org.jooq.impl.DSL.count;
  * Created by songqian on 16/11/25.
  */
 public class ReleaseTaskDAOImpl implements ReleaseTaskDAO {
-
-
   private DSLContext jooq;
 
   @Inject
