@@ -135,33 +135,60 @@ public class ReleaseTaskController {
   public void searchNewTask() {
     router.get("/api/tasks").handler(routingContext -> {
       try {
-
         MultiMap queryParams = routingContext.request().params();
         String pageSizeStr = queryParams.get("pageSize");
         String currentPageStr = queryParams.get("currentPage");
+        String releaseType = queryParams.get("releaseType");
+        String releaseStatus = queryParams.get("releaseStatus");
+
 
         int pageSize = pageSizeStr == null ? 5 : Integer.valueOf(pageSizeStr);
         int currentPage = currentPageStr == null ? 1 : Integer.valueOf(currentPageStr);
-
         JsonObject tasks = new JsonObject();
-
         JsonArray items = new JsonArray();
-        List<ReleaseTask> releaseTasks = releaseTaskService.queryAll(pageSize, currentPage).getReleaseTasks();
-        int total = releaseTaskService.queryAll(pageSize, currentPage).getTotalCount();
+        List<ReleaseTask> releaseTasks = null;
+        int total = 0;
+        if (releaseStatus == null && releaseType == null) {
+          releaseTasks = releaseTaskService.queryAll(pageSize, currentPage).getReleaseTasks();
+          total = releaseTaskService.queryAll(pageSize, currentPage).getTotalCount();
+        } else if (releaseStatus == null && releaseType != null) {
+
+          int releaseTypeNum = Integer.parseInt(releaseType);
+          releaseTasks = releaseTaskService.queryAll(pageSize, currentPage, releaseTypeNum).getReleaseTasks();
+          total = releaseTaskService.queryAll(pageSize, currentPage, releaseTypeNum).getTotalCount();
+
+
+        } else if (releaseStatus != null && releaseType == null) {
+
+          byte releaseTypeStatus = (byte) Integer.parseInt(releaseStatus);
+
+          releaseTasks = releaseTaskService.queryAll(pageSize, currentPage, releaseTypeStatus).getReleaseTasks();
+          total = releaseTaskService.queryAll(pageSize, currentPage, releaseTypeStatus).getTotalCount();
+
+
+        } else if (releaseStatus != null && releaseType != null) {
+          byte releaseTypeStatus = (byte) Integer.parseInt(releaseStatus);
+          int releaseTypeNum = Integer.parseInt(releaseType);
+
+          releaseTasks = releaseTaskService.queryAll(pageSize, currentPage, releaseTypeNum, releaseTypeStatus).getReleaseTasks();
+          total = releaseTaskService.queryAll(pageSize, currentPage, releaseTypeNum, releaseTypeStatus).getTotalCount();
+
+
+        }
+
 
         for (ReleaseTask releaseTask : releaseTasks) {
           JsonObject task = releaseTask.toJson();
           items.add(task);
         }
-
         tasks
           .put("total", total)
           .put("items", items);
         routingContext.response().end(tasks.encode());
-
       } catch (Exception e) {
         e.printStackTrace();
       }
     });
+
   }
 }

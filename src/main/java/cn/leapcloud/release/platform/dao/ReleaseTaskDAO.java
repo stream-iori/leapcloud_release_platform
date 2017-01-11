@@ -17,5 +17,11 @@ public interface ReleaseTaskDAO {
 
   TaskRecordWithCount query(int pageSize, int currentPaged) throws Exception;
 
+  TaskRecordWithCount query(int pageSize, int currentPaged, int releaseType) throws Exception;
+
+  TaskRecordWithCount query(int pageSize, int currentPaged, byte releaseStatus) throws Exception;
+
+  TaskRecordWithCount query(int pageSize, int currentPaged, int releaseType, byte releaseStatus) throws Exception;
+
 
 }
