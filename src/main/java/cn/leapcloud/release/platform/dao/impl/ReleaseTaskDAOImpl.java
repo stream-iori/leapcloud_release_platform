@@ -79,7 +79,7 @@ public class ReleaseTaskDAOImpl implements ReleaseTaskDAO {
     //获得总页数
     int page = (int) Math.ceil((double) count / pageSize);
     int offset = (currentPaged - 1) * pageSize;
-    List<ReleaseTaskRecord> records = jooq.selectFrom(RELEASE_TASK).limit(offset, pageSize).fetch();
+    List<ReleaseTaskRecord> records = jooq.selectFrom(RELEASE_TASK).orderBy(RELEASE_TASK.PROPOSAL_TIME.desc()).limit(offset, pageSize).fetch();
     return new TaskRecordWithCount(count, records);
   }
 }
