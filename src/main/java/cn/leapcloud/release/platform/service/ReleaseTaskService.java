@@ -18,4 +18,12 @@ public interface ReleaseTaskService {
 
   TaskWithCount queryAll(int pageSize, int currentPaged) throws Exception;
 
+  TaskWithCount queryAll(int pageSize, int currentPaged, int releaseType) throws Exception;
+
+
+
+  TaskWithCount queryAll(int pageSize, int currentPaged, byte releaseStatus) throws Exception;
+
+  TaskWithCount queryAll(int pageSize, int currentPaged, int releaseType,byte releaseStatus) throws Exception;
+
 }

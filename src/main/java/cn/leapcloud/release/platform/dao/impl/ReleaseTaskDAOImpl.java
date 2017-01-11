@@ -82,4 +82,39 @@ public class ReleaseTaskDAOImpl implements ReleaseTaskDAO {
     List<ReleaseTaskRecord> records = jooq.selectFrom(RELEASE_TASK).orderBy(RELEASE_TASK.PROPOSAL_TIME.desc()).limit(offset, pageSize).fetch();
     return new TaskRecordWithCount(count, records);
   }
+
+  @Override
+  public TaskRecordWithCount query(int pageSize, int currentPaged, int releaseType) throws Exception {
+
+    Field<Integer> cf = count();
+    Integer count = jooq.select(cf).from(RELEASE_TASK).where(RELEASE_TASK.RELEASE_TYPE.eq(releaseType)).fetchOne(cf);
+
+    int offset = (currentPaged - 1) * pageSize;
+    List<ReleaseTaskRecord> records = jooq.selectFrom(RELEASE_TASK).where(RELEASE_TASK.RELEASE_TYPE.eq(releaseType))
+      .orderBy(RELEASE_TASK.PROPOSAL_TIME.desc()).limit(offset, pageSize).fetch();
+    return new TaskRecordWithCount(count, records);
+  }
+
+  @Override
+  public TaskRecordWithCount query(int pageSize, int currentPaged, byte releaseStatus) throws Exception {
+
+    Field<Integer> cf = count();
+    Integer count = jooq.select(cf).from(RELEASE_TASK).where(RELEASE_TASK.STATUS.eq(releaseStatus)).fetchOne(cf);
+
+    int offset = (currentPaged - 1) * pageSize;
+    List<ReleaseTaskRecord> records = jooq.selectFrom(RELEASE_TASK).where(RELEASE_TASK.STATUS.eq(releaseStatus))
+      .orderBy(RELEASE_TASK.PROPOSAL_TIME.desc()).limit(offset, pageSize).fetch();
+    return new TaskRecordWithCount(count, records);
+  }
+
+  @Override
+  public TaskRecordWithCount query(int pageSize, int currentPaged, int releaseType, byte releaseStatus) throws Exception {
+    Field<Integer> cf = count();
+    Integer count = jooq.select(cf).from(RELEASE_TASK).where(RELEASE_TASK.STATUS.eq(releaseStatus),RELEASE_TASK.RELEASE_TYPE.eq(releaseType)).fetchOne(cf);
+
+    int offset = (currentPaged - 1) * pageSize;
+    List<ReleaseTaskRecord> records = jooq.selectFrom(RELEASE_TASK).where(RELEASE_TASK.STATUS.eq(releaseStatus),RELEASE_TASK.RELEASE_TYPE.eq(releaseType))
+      .orderBy(RELEASE_TASK.PROPOSAL_TIME.desc()).limit(offset, pageSize).fetch();
+    return new TaskRecordWithCount(count, records);
+  }
 }
