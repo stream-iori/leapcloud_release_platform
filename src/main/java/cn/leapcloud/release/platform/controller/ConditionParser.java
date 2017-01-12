@@ -3,8 +3,9 @@ package cn.leapcloud.release.platform.controller;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static cn.leapcloud.release.platform.controller.ConditionParser.SQLOperation.EQ;
 
@@ -20,29 +21,32 @@ public class ConditionParser {
     Object value = op.getValue(alias);
     SQLCondition SQLCondition = new SQLCondition();
 
-    if (value instanceof Number) {
+    if (!(value instanceof JsonObject) && !(value instanceof JsonArray)) {
       SQLCondition.field = alias;
       SQLCondition.op = EQ;
       SQLCondition.value = value;
       return SQLCondition;
     }
 
-    if (alias.equals("$and") || alias.equals("$or")) {
+    if (alias.toUpperCase().equals("$AND") || alias.toUpperCase().equals("$OR")) {
       SQLCondition.isMultiCondition = true;
-      SQLCondition.op = SQLOperation.valueOf(alias);
-      SQLCondition.value = ((JsonArray) value).stream()
-        .map(jsonValue -> getSQLCondition((JsonObject) jsonValue))
-        .collect(Collectors.toList());
+      SQLCondition.op = SQLOperation.valueOf(alias.substring(1));
+      List<SQLCondition> sqlConditions = new ArrayList<>();
+      for (Object jsonValue : ((JsonArray) value).getList()) {
+        sqlConditions.add(getSQLCondition((JsonObject) jsonValue));
+      }
+      SQLCondition.value = sqlConditions;
       return SQLCondition;
     }
 
     JsonObject opObject = (JsonObject) value;
     final String conditionOpField = opObject.fieldNames().iterator().next();
-    if (!conditionOpField.startsWith("$"))
+    if (!conditionOpField.startsWith("$")) {
       throw new IllegalArgumentException("condition token illegal, operator token should start with $");
+    }
 
     SQLCondition.field = alias;
-    SQLCondition.op = Optional.of(SQLOperation.valueOf(conditionOpField.substring(1)))
+    SQLCondition.op = Optional.of(SQLOperation.valueOf(conditionOpField.substring(1).toUpperCase()))
       .orElseThrow(() -> new IllegalArgumentException("no such sql operation token."));
 
     switch (SQLCondition.op) {
