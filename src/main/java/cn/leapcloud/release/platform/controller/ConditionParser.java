@@ -19,10 +19,20 @@ public class ConditionParser {
     String alias = op.fieldNames().iterator().next();
     Object value = op.getValue(alias);
     SQLCondition SQLCondition = new SQLCondition();
-    SQLCondition.field = alias;
+
     if (value instanceof Number) {
+      SQLCondition.field = alias;
       SQLCondition.op = EQ;
       SQLCondition.value = value;
+      return SQLCondition;
+    }
+
+    if (alias.equals("$and") || alias.equals("$or")) {
+      SQLCondition.isMultiCondition = true;
+      SQLCondition.op = SQLOperation.valueOf(alias);
+      SQLCondition.value = ((JsonArray) value).stream()
+        .map(jsonValue -> getSQLCondition((JsonObject) jsonValue))
+        .collect(Collectors.toList());
       return SQLCondition;
     }
 
@@ -31,6 +41,7 @@ public class ConditionParser {
     if (!conditionOpField.startsWith("$"))
       throw new IllegalArgumentException("condition token illegal, operator token should start with $");
 
+    SQLCondition.field = alias;
     SQLCondition.op = Optional.of(SQLOperation.valueOf(conditionOpField.substring(1)))
       .orElseThrow(() -> new IllegalArgumentException("no such sql operation token."));
 
@@ -38,12 +49,6 @@ public class ConditionParser {
       case IN:
       case NIN:
         SQLCondition.value = ((JsonArray) opObject.getValue(conditionOpField)).getList();
-        break;
-      case AND:
-      case OR:
-        SQLCondition.value = ((JsonArray) opObject.getValue(conditionOpField)).stream()
-          .map(jsonValue -> getSQLCondition((JsonObject) jsonValue))
-          .collect(Collectors.toList());
         break;
       default:
         SQLCondition.value = opObject.getValue(conditionOpField);
@@ -53,9 +58,26 @@ public class ConditionParser {
   }
 
   public class SQLCondition {
-    String field;
-    SQLOperation op;
-    Object value;
+    private boolean isMultiCondition;
+    private String field;
+    private SQLOperation op;
+    private Object value;
+
+    public boolean isMultiCondition() {
+      return isMultiCondition;
+    }
+
+    public String getField() {
+      return field;
+    }
+
+    public SQLOperation getOp() {
+      return op;
+    }
+
+    public Object getValue() {
+      return value;
+    }
   }
 
   public enum SQLOperation {
