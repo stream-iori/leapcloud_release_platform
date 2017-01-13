@@ -19,24 +19,23 @@ public class ConditionParser {
   public SQLCondition getSQLCondition(JsonObject op) {
     String alias = op.fieldNames().iterator().next();
     Object value = op.getValue(alias);
-    SQLCondition SQLCondition = new SQLCondition();
+    SQLCondition sqlCondition = new SQLCondition();
 
     if (!(value instanceof JsonObject) && !(value instanceof JsonArray)) {
-      SQLCondition.field = alias;
-      SQLCondition.op = EQ;
-      SQLCondition.value = value;
-      return SQLCondition;
+      sqlCondition.field = alias;
+      sqlCondition.op = EQ;
+      sqlCondition.value = value;
+      return sqlCondition;
     }
 
     if (alias.toUpperCase().equals("$AND") || alias.toUpperCase().equals("$OR")) {
-      SQLCondition.isMultiCondition = true;
-      SQLCondition.op = SQLOperation.valueOf(alias.substring(1));
+      sqlCondition.op = SQLOperation.valueOf(alias.toUpperCase().substring(1));
       List<SQLCondition> sqlConditions = new ArrayList<>();
       for (Object jsonValue : ((JsonArray) value).getList()) {
         sqlConditions.add(getSQLCondition((JsonObject) jsonValue));
       }
-      SQLCondition.value = sqlConditions;
-      return SQLCondition;
+      sqlCondition.value = sqlConditions;
+      return sqlCondition;
     }
 
     JsonObject opObject = (JsonObject) value;
@@ -45,31 +44,26 @@ public class ConditionParser {
       throw new IllegalArgumentException("condition token illegal, operator token should start with $");
     }
 
-    SQLCondition.field = alias;
-    SQLCondition.op = Optional.of(SQLOperation.valueOf(conditionOpField.substring(1).toUpperCase()))
+    sqlCondition.field = alias;
+    sqlCondition.op = Optional.of(SQLOperation.valueOf(conditionOpField.substring(1).toUpperCase()))
       .orElseThrow(() -> new IllegalArgumentException("no such sql operation token."));
 
-    switch (SQLCondition.op) {
+    switch (sqlCondition.op) {
       case IN:
       case NIN:
-        SQLCondition.value = ((JsonArray) opObject.getValue(conditionOpField)).getList();
+        sqlCondition.value = ((JsonArray) opObject.getValue(conditionOpField)).getList();
         break;
       default:
-        SQLCondition.value = opObject.getValue(conditionOpField);
+        sqlCondition.value = opObject.getValue(conditionOpField);
         break;
     }
-    return SQLCondition;
+    return sqlCondition;
   }
 
   public class SQLCondition {
-    private boolean isMultiCondition;
     private String field;
     private SQLOperation op;
     private Object value;
-
-    public boolean isMultiCondition() {
-      return isMultiCondition;
-    }
 
     public String getField() {
       return field;
