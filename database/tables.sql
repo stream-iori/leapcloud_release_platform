@@ -31,3 +31,10 @@ CREATE TABLE `release_task` (
 `release_remark` varchar(150),
 PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+
+
+--增加一个新的字段在ReleaseTask中
+
+
+ALTER TABLE `leapcloud_release_platform`.`release_task` ADD COLUMN `tag` varchar(30) AFTER `release_remark`;
