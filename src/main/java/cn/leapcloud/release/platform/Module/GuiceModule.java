@@ -1,11 +1,9 @@
 package cn.leapcloud.release.platform.Module;
 
-import cn.leapcloud.release.platform.controller.ReleaseTaskController;
-import cn.leapcloud.release.platform.controller.ReleaseTypeController;
-import cn.leapcloud.release.platform.controller.RestfulServer;
-import cn.leapcloud.release.platform.controller.UserController;
+import cn.leapcloud.release.platform.controller.*;
 import cn.leapcloud.release.platform.dao.ReleaseTaskDAO;
 import cn.leapcloud.release.platform.dao.ReleaseTypeDAO;
+import cn.leapcloud.release.platform.dao.SQLConditionCombine;
 import cn.leapcloud.release.platform.dao.UserDAO;
 import cn.leapcloud.release.platform.dao.dbc.DataBaseConnection;
 import cn.leapcloud.release.platform.dao.impl.ReleaseTaskDAOImpl;
@@ -54,6 +52,10 @@ public class GuiceModule implements Module {
     binder.bind(ReleaseTypeController.class);
     //
     binder.bind(RestfulServer.class);
+
+    binder.bind(ConditionParser.class);
+
+    binder.bind(SQLConditionCombine.class);
   }
 
   @Provides

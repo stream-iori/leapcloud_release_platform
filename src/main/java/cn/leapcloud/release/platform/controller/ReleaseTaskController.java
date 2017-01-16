@@ -4,11 +4,11 @@ import cn.leapcloud.release.platform.service.ReleaseTaskService;
 import cn.leapcloud.release.platform.service.domain.ReleaseTask;
 import com.google.common.base.Strings;
 import com.google.inject.Inject;
-import io.vertx.core.MultiMap;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
 
+import java.util.Base64;
 import java.util.List;
 
 
@@ -134,61 +134,118 @@ public class ReleaseTaskController {
 
   public void searchNewTask() {
     router.get("/api/tasks").handler(routingContext -> {
-      try {
-        MultiMap queryParams = routingContext.request().params();
-        String pageSizeStr = queryParams.get("pageSize");
-        String currentPageStr = queryParams.get("currentPage");
-        String releaseType = queryParams.get("releaseType");
-        String releaseStatus = queryParams.get("releaseStatus");
+      String jsonBaseStr = routingContext.request().getParam("query");
+      String orderInfo = routingContext.request().getParam("order");
 
+      String skipString = routingContext.request().getParam("skip");
+      String limitString = routingContext.request().getParam("limit");
+      int skip = skipString == null ? 5 : Integer.valueOf(skipString);
+      int limit = limitString == null ? 1 : Integer.valueOf(limitString);
 
-        int pageSize = pageSizeStr == null ? 5 : Integer.valueOf(pageSizeStr);
-        int currentPage = currentPageStr == null ? 1 : Integer.valueOf(currentPageStr);
-        JsonObject tasks = new JsonObject();
-        JsonArray items = new JsonArray();
-        List<ReleaseTask> releaseTasks = null;
-        int total = 0;
-        if (releaseStatus == null && releaseType == null) {
-          releaseTasks = releaseTaskService.queryAll(pageSize, currentPage).getReleaseTasks();
-          total = releaseTaskService.queryAll(pageSize, currentPage).getTotalCount();
-        } else if (releaseStatus == null && releaseType != null) {
-
-          int releaseTypeNum = Integer.parseInt(releaseType);
-          releaseTasks = releaseTaskService.queryAll(pageSize, currentPage, releaseTypeNum).getReleaseTasks();
-          total = releaseTaskService.queryAll(pageSize, currentPage, releaseTypeNum).getTotalCount();
-
-
-        } else if (releaseStatus != null && releaseType == null) {
-
-          byte releaseTypeStatus = (byte) Integer.parseInt(releaseStatus);
-
-          releaseTasks = releaseTaskService.queryAll(pageSize, currentPage, releaseTypeStatus).getReleaseTasks();
-          total = releaseTaskService.queryAll(pageSize, currentPage, releaseTypeStatus).getTotalCount();
-
-
-        } else if (releaseStatus != null && releaseType != null) {
-          byte releaseTypeStatus = (byte) Integer.parseInt(releaseStatus);
-          int releaseTypeNum = Integer.parseInt(releaseType);
-
-          releaseTasks = releaseTaskService.queryAll(pageSize, currentPage, releaseTypeNum, releaseTypeStatus).getReleaseTasks();
-          total = releaseTaskService.queryAll(pageSize, currentPage, releaseTypeNum, releaseTypeStatus).getTotalCount();
-
-
-        }
-
-
-        for (ReleaseTask releaseTask : releaseTasks) {
-          JsonObject task = releaseTask.toJson();
-          items.add(task);
-        }
-        tasks
-          .put("total", total)
-          .put("items", items);
-        routingContext.response().end(tasks.encode());
-      } catch (Exception e) {
-        e.printStackTrace();
+      int i = 0;
+      switch (orderInfo) {
+        case "releaseType":
+          i = 1;
+          break;
+        case "-releaseType":
+          i = 2;
+          break;
+        case "proposalTime":
+          i = 3;
+          break;
+        case "-proposalTime":
+          i = 4;
+          break;
+        case "updateTime":
+          i = 5;
+          break;
+        case "-updateTime":
+          i = 6;
+          break;
+        case "status":
+          i = 7;
+          break;
+        case "-status":
+          i = 8;
+          break;
       }
-    });
+      String jsonStr = new String(Base64.getDecoder().decode(jsonBaseStr));
+      JsonObject jsonObject = new JsonObject(jsonStr);
 
+      JsonObject tasks = new JsonObject();
+      JsonArray items = new JsonArray();
+      List<ReleaseTask> releaseTasks = null;
+      int total = 0;
+
+      releaseTasks = releaseTaskService.queryAll(jsonObject, i, skip, limit).getReleaseTasks();
+      total = releaseTaskService.queryAll(jsonObject, i, skip, limit).getTotalCount();
+
+
+      for (ReleaseTask releaseTask : releaseTasks) {
+        JsonObject task = releaseTask.toJson();
+        items.add(task);
+      }
+
+      tasks.put("total", total).put("items", items);
+      routingContext.response().end(tasks.encode());
+
+
+//      try {
+//        MultiMap queryParams = routingContext.request().params();
+//        String pageSizeStr = queryParams.get("pageSize");
+//        String currentPageStr = queryParams.get("currentPage");
+//        String releaseType = queryParams.get("releaseType");
+//        String releaseStatus = queryParams.get("releaseStatus");
+//
+
+
+//
+//        int pageSize = pageSizeStr == null ? 5 : Integer.valueOf(pageSizeStr);
+//        int currentPage = currentPageStr == null ? 1 : Integer.valueOf(currentPageStr);
+//        JsonObject tasks = new JsonObject();
+//        JsonArray items = new JsonArray();
+//        List<ReleaseTask> releaseTasks = null;
+//        int total = 0;
+//        if (releaseStatus == null && releaseType == null) {
+//          releaseTasks = releaseTaskService.queryAll(pageSize, currentPage).getReleaseTasks();
+//          total = releaseTaskService.queryAll(pageSize, currentPage).getTotalCount();
+//        } else if (releaseStatus == null && releaseType != null) {
+//
+//          int releaseTypeNum = Integer.parseInt(releaseType);
+//          releaseTasks = releaseTaskService.queryAll(pageSize, currentPage, releaseTypeNum).getReleaseTasks();
+//          total = releaseTaskService.queryAll(pageSize, currentPage, releaseTypeNum).getTotalCount();
+//
+//
+//        } else if (releaseStatus != null && releaseType == null) {
+//
+//          byte releaseTypeStatus = (byte) Integer.parseInt(releaseStatus);
+//
+//          releaseTasks = releaseTaskService.queryAll(pageSize, currentPage, releaseTypeStatus).getReleaseTasks();
+//          total = releaseTaskService.queryAll(pageSize, currentPage, releaseTypeStatus).getTotalCount();
+//
+//
+//        } else if (releaseStatus != null && releaseType != null) {
+//          byte releaseTypeStatus = (byte) Integer.parseInt(releaseStatus);
+//          int releaseTypeNum = Integer.parseInt(releaseType);
+//
+//          releaseTasks = releaseTaskService.queryAll(pageSize, currentPage, releaseTypeNum, releaseTypeStatus).getReleaseTasks();
+//          total = releaseTaskService.queryAll(pageSize, currentPage, releaseTypeNum, releaseTypeStatus).getTotalCount();
+//
+//
+//        }
+//
+//
+//        for (ReleaseTask releaseTask : releaseTasks) {
+//          JsonObject task = releaseTask.toJson();
+//          items.add(task);
+//        }
+//        tasks
+//          .put("total", total)
+//          .put("items", items);
+//        routingContext.response().end(tasks.encode());
+//      } catch (Exception e) {
+//        e.printStackTrace();
+//      }
+    });
   }
 }

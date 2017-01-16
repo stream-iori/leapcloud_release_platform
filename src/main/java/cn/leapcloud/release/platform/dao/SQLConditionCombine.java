@@ -13,6 +13,8 @@ import java.util.stream.Collectors;
 public class SQLConditionCombine {
 
   private <R extends Record> Condition matchCondition(ConditionParser.SQLCondition sqlCondition, TableImpl<R> table) {
+
+
     Field field = table.field(sqlCondition.getField());
     Object value = sqlCondition.getValue();
     Condition condition = null;

@@ -47,16 +47,26 @@ public class MockServer {
     JsonObject config = vertx.fileSystem().readFileBlocking("./config.json").toJsonObject();
     Injector injector = Guice.createInjector(new GuiceModule(vertx, config));
 
+
+
     SQLConditionCombine conditionCombine = new SQLConditionCombine();
+
     DSLContext jooq = injector.getInstance(DSLContext.class);
+
     ConditionParser conditionParser = new ConditionParser();
+
     JsonObject jsonObject = new JsonObject();
-    jsonObject.put("id", new JsonObject().put("$eq", 1));
+
+    jsonObject.put("id", new JsonObject().put("$eq", 16));
+
     ConditionParser.SQLCondition sqlCondition = conditionParser.getSQLCondition(jsonObject);
 
     SelectConditionStep<ReleaseTaskRecord> conditionStep = conditionCombine
+
       .combineCondition(RELEASE_TASK, jooq.selectFrom(RELEASE_TASK), sqlCondition);
 
-    Assert.assertEquals(1L, (long) conditionStep.fetchOne().getId());
+    Assert.assertEquals(16L, (long) conditionStep.fetchOne().getId());
+
+    System.out.println(conditionStep.fetch());
   }
 }
