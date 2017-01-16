@@ -7,7 +7,7 @@ target/
 *.iml
 gradle/wrapper/
 */pom.xml.versionsBackup
-pom.xml.versionsBackup	
+pom.xml.versionsBackup
 .gradle
 out/
 log/*
@@ -16,3 +16,4 @@ log/*
 target/
 *.log
 src/main/java/cn/leapcloud/release/platform/dao/entity/
+.vertx/
