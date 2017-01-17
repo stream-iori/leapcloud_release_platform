@@ -33,7 +33,7 @@ public class ReleaseTaskServiceImpl implements ReleaseTaskService {
     this.conditionParser=conditionParser;
   }
 
-  public boolean createNewTask(int releaseType, String proposal, String title, String projectURL, String projectDescription) throws Exception {
+  public boolean createNewTask(int releaseType, String proposal, String title, String projectURL, String projectDescription,String tag) throws Exception {
     return jooq.transactionResult(configuration -> {
       ReleaseTaskRecord releaseTaskRecord = jooq.newRecord(RELEASE_TASK);
       //当前时间
@@ -47,6 +47,7 @@ public class ReleaseTaskServiceImpl implements ReleaseTaskService {
       releaseTaskRecord.setUpdateTime(now);
       releaseTaskRecord.setProjectLocation(projectURL);
       releaseTaskRecord.setProjectDesc(projectDescription);
+      releaseTaskRecord.setTag(tag);
       boolean resultCreateNewTask = releaseTaskDAO.doCreate(releaseTaskRecord, configuration);
       if (resultCreateNewTask) {
         return true;
@@ -56,7 +57,7 @@ public class ReleaseTaskServiceImpl implements ReleaseTaskService {
     });
   }
 
-  public boolean updateNewTask(int id, int releaseType, String proposal, String title, String projectURL, String projectDescription) throws Exception {
+  public boolean updateNewTask(int id, int releaseType, String proposal, String title, String projectURL, String projectDescription,String tag) throws Exception {
     return jooq.transactionResult(configuration -> {
 
       Timestamp now = new Timestamp(System.currentTimeMillis());
@@ -68,6 +69,7 @@ public class ReleaseTaskServiceImpl implements ReleaseTaskService {
       releaseTaskRecord.setProjectLocation(projectURL);
       releaseTaskRecord.setProjectDesc(projectDescription);
       releaseTaskRecord.setUpdateTime(now);
+      releaseTaskRecord.setTag(tag);
       boolean resultUpdateNewTask = releaseTaskDAO.doUpdate(releaseTaskRecord, configuration);
       if (resultUpdateNewTask) {
         return true;

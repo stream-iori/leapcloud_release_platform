@@ -9,10 +9,10 @@ import io.vertx.core.json.JsonObject;
 public interface ReleaseTaskService {
 
 
-  boolean createNewTask(int releaseType, String proposal, String title, String projectURL, String projectDescription)
+  boolean createNewTask(int releaseType, String proposal, String title, String projectURL, String projectDescription,String tag)
     throws Exception;
 
-  boolean updateNewTask(int id, int releaseType, String proposal, String title, String projectURL, String projectDescription)
+  boolean updateNewTask(int id, int releaseType, String proposal, String title, String projectURL, String projectDescription,String tag)
     throws Exception;
 
   boolean manageNewTask(int id, byte status, String releaseRemark) throws Exception;
