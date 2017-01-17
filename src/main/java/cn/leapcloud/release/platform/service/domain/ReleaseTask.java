@@ -19,6 +19,8 @@ public class ReleaseTask {
   private final Status status;
   private final String releaseRemark;
 
+  private final String tag;
+
   public int getId() {
     return id;
   }
@@ -59,6 +61,10 @@ public class ReleaseTask {
     return releaseRemark;
   }
 
+  public String getTag() {
+    return tag;
+  }
+
   public JsonObject toJson() {
     JsonObject jsonObject = new JsonObject();
     jsonObject.put("id", id);
@@ -71,12 +77,13 @@ public class ReleaseTask {
     jsonObject.put("updateTime", updateTime.toString());
     jsonObject.put("status", status.ordinal());
     jsonObject.put("releaseRemark", releaseRemark);
+    jsonObject.put("tag", tag);
     return jsonObject;
   }
 
   @Override
   public String toString() {
-    return "ReleaseTaskDAO{" +
+    return "ReleaseTask{" +
       "id=" + id +
       ", releaseType=" + releaseType +
       ", title='" + title + '\'' +
@@ -87,6 +94,7 @@ public class ReleaseTask {
       ", updateTime=" + updateTime +
       ", status=" + status +
       ", releaseRemark='" + releaseRemark + '\'' +
+      ", tag='" + tag + '\'' +
       '}';
   }
 
@@ -101,6 +109,7 @@ public class ReleaseTask {
     private Date updateTime;
     private Status status;
     private String releaseRemark;
+    private String tag;
 
     public Builder id(int id) {
       this.id = id;
@@ -152,6 +161,12 @@ public class ReleaseTask {
       return this;
     }
 
+    public Builder tag(String tag) {
+      this.tag = tag;
+      return this;
+    }
+
+
     public ReleaseTask build() {
       return new ReleaseTask(this);
     }
@@ -168,6 +183,7 @@ public class ReleaseTask {
     updateTime = builder.updateTime;
     status = builder.status;
     releaseRemark = builder.releaseRemark;
+    tag = builder.tag;
   }
 }
 

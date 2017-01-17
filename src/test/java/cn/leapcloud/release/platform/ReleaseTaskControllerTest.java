@@ -30,7 +30,7 @@ public class ReleaseTaskControllerTest extends Base {
   public void insert(TestContext context) {
     Async async = context.async();
     JsonObject body = new JsonObject().put("releaseType", 3).put("proposal", "www").put("title", "www")
-      .put("projectURL", "www").put("projectDescription", "www");
+      .put("projectURL", "www").put("projectDescription", "www").put("tag","1.1.1");
 
 
     vertx.createHttpClient().post(8888, "localhost", "/api/task", httpClientResponse -> {
@@ -45,8 +45,8 @@ public class ReleaseTaskControllerTest extends Base {
   public void update(TestContext context) {
     Async async = context.async();
 
-    JsonObject body = new JsonObject().put("id", 74).put("releaseType", 2).put("proposal", "stream").put("title", "www")
-      .put("projectURL", "www").put("projectDescription", "www");
+    JsonObject body = new JsonObject().put("id", 105).put("releaseType", 2).put("proposal", "stream").put("title", "www")
+      .put("projectURL", "www").put("projectDescription", "www").put("tag","1.1.2");
 
     vertx.createHttpClient().put(8888, "localhost", "/api/task", httpClientResponse -> {
       httpClientResponse.exceptionHandler(context::fail);

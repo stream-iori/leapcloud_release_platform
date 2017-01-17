@@ -42,6 +42,8 @@ public class ReleaseTaskController {
         String title = jsonObject.getString("title");
         String projectURL = jsonObject.getString("projectURL");
         String projectDescription = jsonObject.getString("projectDescription");
+        String tag = jsonObject.getString("tag");
+
 
         if (Strings.isNullOrEmpty(proposal)) {
           routingContext.response().setStatusCode(400).setStatusMessage("username can not be empty").end();
@@ -59,12 +61,18 @@ public class ReleaseTaskController {
           routingContext.response().setStatusCode(400).setStatusMessage("description can not be empty").end();
           return;
         }
+        if (Strings.isNullOrEmpty(tag)) {
+          routingContext.response().setStatusCode(400).setStatusMessage("tag can not be empty").end();
+        }
+
         if (releaseType < 1 || releaseType > 3) {
           routingContext.response().setStatusCode(400).setStatusMessage("style must be chosen").end();
           return;
         }
+
+
         try {
-          boolean result = releaseTaskService.createNewTask(releaseType, proposal, title, projectURL, projectDescription);
+          boolean result = releaseTaskService.createNewTask(releaseType, proposal, title, projectURL, projectDescription,tag);
           if (result) {
             routingContext.response().setStatusCode(200).end("insert succeed");
           } else {
@@ -88,8 +96,9 @@ public class ReleaseTaskController {
         String title = jsonObject.getString("title");
         String projectURL = jsonObject.getString("projectURL");
         String projectDescription = jsonObject.getString("projectDescription");
+        String tag = jsonObject.getString("tag");
         try {
-          boolean result = releaseTaskService.updateNewTask(id, releaseType, proposal, title, projectURL, projectDescription);
+          boolean result = releaseTaskService.updateNewTask(id, releaseType, proposal, title, projectURL, projectDescription,tag);
           if (result) {
             routingContext.response().setStatusCode(200).end("update succeed");
           } else {
