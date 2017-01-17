@@ -19,12 +19,17 @@ public class JsonTest {
     ConditionParser conditionParser = new ConditionParser();
 
     JsonObject jsonObject1 = new JsonObject();
-    jsonObject1.put("age", 20);
-    ConditionParser.SQLCondition sqlCondition = conditionParser.getSQLCondition(jsonObject1);
-    Assert.assertEquals("age", sqlCondition.getField());
-    Assert.assertEquals(sqlCondition.getOp(), ConditionParser.SQLOperation.EQ);
-    Assert.assertEquals(sqlCondition.getValue(), 20);
-    System.out.println("eq测试完毕");
+    jsonObject1.put("$eq", 20);
+    JsonObject jsonObject2 = new JsonObject();
+    jsonObject2.put("status",jsonObject1);
+
+
+
+//    ConditionParser.SQLCondition sqlCondition = conditionParser.getSQLCondition(jsonObject1);
+//    Assert.assertEquals("age", sqlCondition.getField());
+//    Assert.assertEquals(sqlCondition.getOp(), ConditionParser.SQLOperation.EQ);
+//    Assert.assertEquals(sqlCondition.getValue(), 20);
+    System.out.println(jsonObject2);
   }
 
   @Test
@@ -68,7 +73,7 @@ public class JsonTest {
     jsonArray.add(jsonObject4);
     JsonObject jsonObject5 = new JsonObject();
     jsonObject5.put("$and", jsonArray);
-//    System.out.println(jsonObject5);
+    System.out.println(jsonObject5);
 
     ConditionParser.SQLCondition sqlCondition = conditionParser.getSQLCondition(jsonObject5);
 

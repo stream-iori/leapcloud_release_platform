@@ -1,8 +1,11 @@
 package cn.leapcloud.release.platform.controller;
 
+import cn.leapcloud.release.platform.service.ReleaseTaskService;
 import cn.leapcloud.release.platform.service.UserService;
+import cn.leapcloud.release.platform.service.domain.ReleaseTask;
 import com.google.common.base.Strings;
 import io.vertx.core.http.HttpServerResponse;
+import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
@@ -10,6 +13,7 @@ import io.vertx.ext.web.Router;
 import io.vertx.ext.web.Session;
 
 import javax.inject.Inject;
+import java.util.List;
 
 /**
  * Created by stream on.
@@ -20,11 +24,14 @@ public class UserController {
 
   private UserService userService;
   private Router router;
+  private ReleaseTaskService releaseTaskService;
+
 
   @Inject
-  public UserController(Router router, UserService userService) {
+  public UserController(Router router, UserService userService, ReleaseTaskService releaseTaskService) {
     this.router = router;
     this.userService = userService;
+    this.releaseTaskService = releaseTaskService;
     initRouter();
   }
 
@@ -69,10 +76,41 @@ public class UserController {
 
 
         boolean result = userService.login(username, password);
+
+
         if (result) {
           //3. 设置session
           Session session = routingContext.session().put("userInfo", new JsonObject().put("name", username));
-          response.setStatusCode(200).putHeader("vertx-web.session", session.id()).setStatusMessage("login success.").end();
+          int skip = 1;
+          int limit = 5;
+          int i = 4;
+          JsonObject object = new JsonObject();
+          object.put("$eq", 0);
+          JsonObject object1 = new JsonObject();
+          object1.put("status", object);
+
+
+          JsonObject tasks = new JsonObject();
+          JsonArray items = new JsonArray();
+          List<ReleaseTask> releaseTasks = null;
+          int total = 0;
+
+          releaseTasks = releaseTaskService.queryAll(object1, i, skip, limit).getReleaseTasks();
+
+
+          total = releaseTaskService.queryAll(object1, i, skip, limit).getTotalCount();
+
+
+          for (ReleaseTask releaseTask : releaseTasks) {
+
+            JsonObject task = releaseTask.toJson();
+            items.add(task);
+          }
+
+          tasks.put("total", total).put("items", items);
+
+
+          response.setStatusCode(200).putHeader("vertx-web.session", session.id()).setStatusMessage("login success.").end(tasks.encode());
         } else {
           response.setStatusCode(400).setStatusMessage("password incorrect").end();
         }
