@@ -148,8 +148,8 @@ public class ReleaseTaskController {
 
       String skipString = routingContext.request().getParam("skip");
       String limitString = routingContext.request().getParam("limit");
-      int skip = skipString == null ? 5 : Integer.valueOf(skipString);
-      int limit = limitString == null ? 1 : Integer.valueOf(limitString);
+      int skip = skipString == null ? 1 : Integer.valueOf(skipString);
+      int limit = limitString == null ? 5 : Integer.valueOf(limitString);
 
       int i = 0;
       switch (orderInfo) {
