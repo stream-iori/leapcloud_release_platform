@@ -83,13 +83,44 @@ public class ReleaseTaskControllerTest extends Base {
   @Test
   public void getWant(TestContext context) {
     Async async = context.async();
-    vertx.createHttpClient().get(8888, "localhost", "/api/tasks?pageSize=2&currentPage=2", httpClientResponse -> {
+    vertx.createHttpClient().get(8888, "localhost", "/api/tasks", httpClientResponse -> {
       httpClientResponse.exceptionHandler(context::fail);
       context.assertEquals(200, httpClientResponse.statusCode());
       async.complete();
     }).end();
+  }
+
+
+  @Test
+  public void getWant1(TestContext context){
+    Async async =context.async();
+    vertx.createHttpClient().get(8888,"localhost","/api/tasks?query=eyJzdGF0dXMiOnsiJGVxIjowfX0=&skip=3&limit=4",httpClientResponse -> {
+      httpClientResponse.exceptionHandler(context::fail);
+      context.assertEquals(200,httpClientResponse.statusCode());
+      async.complete();
+    }).end();
 
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 }

@@ -72,7 +72,7 @@ public class ReleaseTaskController {
 
 
         try {
-          boolean result = releaseTaskService.createNewTask(releaseType, proposal, title, projectURL, projectDescription,tag);
+          boolean result = releaseTaskService.createNewTask(releaseType, proposal, title, projectURL, projectDescription, tag);
           if (result) {
             routingContext.response().setStatusCode(200).end("insert succeed");
           } else {
@@ -98,7 +98,7 @@ public class ReleaseTaskController {
         String projectDescription = jsonObject.getString("projectDescription");
         String tag = jsonObject.getString("tag");
         try {
-          boolean result = releaseTaskService.updateNewTask(id, releaseType, proposal, title, projectURL, projectDescription,tag);
+          boolean result = releaseTaskService.updateNewTask(id, releaseType, proposal, title, projectURL, projectDescription, tag);
           if (result) {
             routingContext.response().setStatusCode(200).end("update succeed");
           } else {
@@ -144,40 +144,47 @@ public class ReleaseTaskController {
   public void searchNewTask() {
     router.get("/api/tasks").handler(routingContext -> {
       String jsonBaseStr = routingContext.request().getParam("query");
-      String orderInfo = routingContext.request().getParam("order");
+      if(jsonBaseStr==null) jsonBaseStr="eyJpZCI6eyIkZ3QiOjB9fQ==";
 
+      String orderInfo = routingContext.request().getParam("order");
       String skipString = routingContext.request().getParam("skip");
       String limitString = routingContext.request().getParam("limit");
+
       int skip = skipString == null ? 1 : Integer.valueOf(skipString);
       int limit = limitString == null ? 5 : Integer.valueOf(limitString);
 
-      int i = 0;
-      switch (orderInfo) {
-        case "releaseType":
-          i = 1;
-          break;
-        case "-releaseType":
-          i = 2;
-          break;
-        case "proposalTime":
-          i = 3;
-          break;
-        case "-proposalTime":
-          i = 4;
-          break;
-        case "updateTime":
-          i = 5;
-          break;
-        case "-updateTime":
-          i = 6;
-          break;
-        case "status":
-          i = 7;
-          break;
-        case "-status":
-          i = 8;
-          break;
+      int i=0;
+      if (orderInfo == null) {
+        i = 0;
+      } else {
+        switch (orderInfo) {
+          case "releaseType":
+            i = 1;
+            break;
+          case "-releaseType":
+            i = 2;
+            break;
+          case "proposalTime":
+            i = 3;
+            break;
+          case "-proposalTime":
+            i = 4;
+            break;
+          case "updateTime":
+            i = 5;
+            break;
+          case "-updateTime":
+            i = 6;
+            break;
+          case "status":
+            i = 7;
+            break;
+          case "-status":
+            i = 8;
+            break;
+        }
       }
+
       String jsonStr = new String(Base64.getDecoder().decode(jsonBaseStr));
       JsonObject jsonObject = new JsonObject(jsonStr);
 
