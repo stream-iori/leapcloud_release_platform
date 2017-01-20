@@ -186,6 +186,7 @@ public class ReleaseTaskServiceImpl implements ReleaseTaskService {
     builder.releaseType(releaseTaskRecord.getReleaseType());
     builder.updateTime(releaseTaskRecord.getUpdateTime());
     builder.releaseRemark(releaseTaskRecord.getReleaseRemark());
+    builder.tag(releaseTaskRecord.getTag());
 
     return builder.build();
   }
