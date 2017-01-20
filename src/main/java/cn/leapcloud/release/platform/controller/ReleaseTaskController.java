@@ -155,7 +155,7 @@ public class ReleaseTaskController {
 
       int i=0;
       if (orderInfo == null) {
-        i = 0;
+        i = 4;
       } else {
         switch (orderInfo) {
           case "releaseType":
