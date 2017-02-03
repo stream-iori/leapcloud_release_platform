@@ -12,7 +12,7 @@ public interface UserDAO {
 
   boolean doUpdate(UserRecord userRecord, Configuration configuration) throws Exception;
 
-  UserRecord queryById(int id) throws Exception;
+  UserRecord query() throws RuntimeException;
 
   UserRecord queryByName(String name);
 

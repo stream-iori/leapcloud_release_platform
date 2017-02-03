@@ -10,7 +10,7 @@ public interface UserService {
 
   boolean modifyUser(User user) throws Exception;
 
-  User findById(int id) throws Exception;
+  User find() throws RuntimeException;
 
   /**
    * 登录

@@ -4,5 +4,13 @@
     "user": "${config.mysql.jdbc.user}",
     "password": "${config.mysql.jdbc.password}"
   },
+  "mail": {
+    "hostname": "smtp.partner.outlook.cn",
+    "port": 587 ,
+    "username" : "alert@maxleap.com",
+    "password" : "Yaqu8132"
+  },
+
   "httpPort" : ${config.httpPort}
+
 }

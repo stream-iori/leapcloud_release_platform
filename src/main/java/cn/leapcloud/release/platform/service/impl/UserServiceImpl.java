@@ -52,8 +52,8 @@ public class UserServiceImpl implements UserService {
     });
   }
 
-  public User findById(int id) throws Exception {
-    UserRecord userRecord = userDAO.queryById(id);
+  public User find() throws RuntimeException {
+    UserRecord userRecord = userDAO.query();
     return userConvert(userRecord);
   }
 

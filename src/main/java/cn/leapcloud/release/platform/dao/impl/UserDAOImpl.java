@@ -36,8 +36,8 @@ public class UserDAOImpl implements UserDAO {
     return effectRow > 0;
   }
 
-  public UserRecord queryById(int id) throws Exception {
-    return jooq.selectFrom(USER).where(USER.ID.equal(id)).fetchOne();
+  public UserRecord query() throws RuntimeException {
+    return jooq.selectFrom(USER).fetchOne();
   }
 
   public UserRecord queryByName(String name) {
