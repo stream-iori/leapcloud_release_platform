@@ -3,16 +3,55 @@ package cn.leapcloud.release.platform;
 import cn.leapcloud.release.platform.controller.ConditionParser;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
+import io.vertx.ext.mail.*;
+import io.vertx.ext.unit.Async;
+import io.vertx.ext.unit.TestContext;
+import io.vertx.ext.unit.junit.VertxUnitRunner;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static cn.leapcloud.release.platform.Base.vertx;
+
 /**
  * Created by songqian on 17/1/12.
  */
+@RunWith(VertxUnitRunner.class)
 public class JsonTest {
+
+  @Test
+  public void mail(TestContext context) {
+    Async async = context.async();
+    MailConfig mailConfig = new MailConfig();
+    mailConfig.setHostname("smtp.partner.outlook.cn");
+    mailConfig.setPort(587);
+    mailConfig.setStarttls(StartTLSOptions.OPTIONAL);
+    mailConfig.setTrustAll(true);
+    mailConfig.setLogin(LoginOption.REQUIRED);
+    mailConfig.setUsername("alert@maxleap.com");
+    mailConfig.setPassword("Yaqu8132");
+
+
+    MailClient mailClient = MailClient.createNonShared(vertx, mailConfig);
+    MailMessage mailMessage = new MailMessage();
+    mailMessage.setFrom("alert@maxleap.com");
+    mailMessage.setTo("qsong@maxleap.com");
+    mailMessage.setSubject("待发布项目");
+    mailMessage.setHtml("<a href='http://10.10.10.196'>点我</a>");
+
+
+    mailClient.sendMail(mailMessage, mailResultAsyncResult -> {
+      if (mailResultAsyncResult.succeeded()) {
+        System.out.println(mailResultAsyncResult.result());
+        async.complete();
+      } else {
+        mailResultAsyncResult.cause().printStackTrace();
+      }
+    });
+  }
 
   @Test
   public void testEq() {
@@ -21,8 +60,7 @@ public class JsonTest {
     JsonObject jsonObject1 = new JsonObject();
     jsonObject1.put("$eq", 20);
     JsonObject jsonObject2 = new JsonObject();
-    jsonObject2.put("status",jsonObject1);
-
+    jsonObject2.put("status", jsonObject1);
 
 
 //    ConditionParser.SQLCondition sqlCondition = conditionParser.getSQLCondition(jsonObject1);

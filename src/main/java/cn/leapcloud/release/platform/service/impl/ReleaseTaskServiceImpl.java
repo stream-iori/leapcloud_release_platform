@@ -3,6 +3,7 @@ package cn.leapcloud.release.platform.service.impl;
 import cn.leapcloud.release.platform.controller.ConditionParser;
 import cn.leapcloud.release.platform.dao.ReleaseTaskDAO;
 import cn.leapcloud.release.platform.dao.entity.tables.records.ReleaseTaskRecord;
+import cn.leapcloud.release.platform.dao.impl.MailPerform;
 import cn.leapcloud.release.platform.dao.impl.TaskWithCount;
 import cn.leapcloud.release.platform.service.ReleaseTaskService;
 import cn.leapcloud.release.platform.service.domain.ReleaseTask;
@@ -25,15 +26,17 @@ public class ReleaseTaskServiceImpl implements ReleaseTaskService {
   private DSLContext jooq;
   private ReleaseTaskDAO releaseTaskDAO;
   private ConditionParser conditionParser;
+  private MailPerform mailPerform;
 
   @Inject
-  public ReleaseTaskServiceImpl(DSLContext jooq, ReleaseTaskDAO releaseTaskDAO,ConditionParser conditionParser) {
+  public ReleaseTaskServiceImpl(DSLContext jooq, ReleaseTaskDAO releaseTaskDAO, ConditionParser conditionParser, MailPerform mailPerform) {
     this.jooq = jooq;
     this.releaseTaskDAO = releaseTaskDAO;
-    this.conditionParser=conditionParser;
+    this.conditionParser = conditionParser;
+    this.mailPerform = mailPerform;
   }
 
-  public boolean createNewTask(int releaseType, String proposal, String title, String projectURL, String projectDescription,String tag) throws Exception {
+  public boolean createNewTask(int releaseType, String proposal, String title, String projectURL, String projectDescription, String tag) throws Exception {
     return jooq.transactionResult(configuration -> {
       ReleaseTaskRecord releaseTaskRecord = jooq.newRecord(RELEASE_TASK);
       //当前时间
@@ -50,14 +53,17 @@ public class ReleaseTaskServiceImpl implements ReleaseTaskService {
       releaseTaskRecord.setTag(tag);
       boolean resultCreateNewTask = releaseTaskDAO.doCreate(releaseTaskRecord, configuration);
       if (resultCreateNewTask) {
+        mailPerform.sendMail();
         return true;
       } else {
         throw new RuntimeException("create failed");
       }
+
     });
+
   }
 
-  public boolean updateNewTask(int id, int releaseType, String proposal, String title, String projectURL, String projectDescription,String tag) throws Exception {
+  public boolean updateNewTask(int id, int releaseType, String proposal, String title, String projectURL, String projectDescription, String tag) throws Exception {
     return jooq.transactionResult(configuration -> {
 
       Timestamp now = new Timestamp(System.currentTimeMillis());
@@ -159,11 +165,11 @@ public class ReleaseTaskServiceImpl implements ReleaseTaskService {
 //  }
 
   @Override
-  public TaskWithCount queryAll(JsonObject jsonObject,int i,int skip, int limit) throws RuntimeException {
+  public TaskWithCount queryAll(JsonObject jsonObject, int i, int skip, int limit) throws RuntimeException {
     List<ReleaseTask> releaseTasks = new ArrayList<>();
     ConditionParser.SQLCondition sqlCondition = conditionParser.getSQLCondition(jsonObject);
-    List<ReleaseTaskRecord> releaseTaskRecords = releaseTaskDAO.query(sqlCondition,i,skip,limit).getRecords();
-    int totalCountUp = releaseTaskDAO.query(sqlCondition,i,skip,limit).getTotalCount();
+    List<ReleaseTaskRecord> releaseTaskRecords = releaseTaskDAO.query(sqlCondition, i, skip, limit).getRecords();
+    int totalCountUp = releaseTaskDAO.query(sqlCondition, i, skip, limit).getTotalCount();
 
     ReleaseTask.Builder builder = new ReleaseTask.Builder();
     for (ReleaseTaskRecord releaseTaskRecord : releaseTaskRecords) {
