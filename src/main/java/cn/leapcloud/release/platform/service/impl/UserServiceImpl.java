@@ -80,7 +80,8 @@ public class UserServiceImpl implements UserService {
   private User userConvert(UserRecord userRecord) {
     User user = null;
     if (userRecord != null) {
-      user = new User.Builder().id(userRecord.getId()).name(userRecord.getName()).email(userRecord.getMail()).build();
+      user = new User.Builder().id(userRecord.getId()).name(userRecord.getName()).email(userRecord.getMail())
+                     .ddId(userRecord.getDdid()).build();
     }
     return user;
   }

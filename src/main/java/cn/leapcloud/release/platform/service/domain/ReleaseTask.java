@@ -73,7 +73,7 @@ public class ReleaseTask {
     jsonObject.put("projectURL", projectLocation);
     jsonObject.put("projectDescription", projectDesc);
     jsonObject.put("proposal", proposal);
-    jsonObject.put("proposalTime", proposalTime.toString());
+    jsonObject.put("proposalTime", proposalTime.toString().substring(0, proposalTime.toString().length() - 2));
     jsonObject.put("updateTime", updateTime.toString());
     jsonObject.put("status", status.ordinal());
     jsonObject.put("releaseRemark", releaseRemark);

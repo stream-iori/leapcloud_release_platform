@@ -3,7 +3,7 @@ package cn.leapcloud.release.platform.service.impl;
 import cn.leapcloud.release.platform.controller.ConditionParser;
 import cn.leapcloud.release.platform.dao.ReleaseTaskDAO;
 import cn.leapcloud.release.platform.dao.entity.tables.records.ReleaseTaskRecord;
-import cn.leapcloud.release.platform.dao.impl.MailPerform;
+import cn.leapcloud.release.platform.dao.impl.DingPerform;
 import cn.leapcloud.release.platform.dao.impl.TaskWithCount;
 import cn.leapcloud.release.platform.service.ReleaseTaskService;
 import cn.leapcloud.release.platform.service.domain.ReleaseTask;
@@ -26,14 +26,15 @@ public class ReleaseTaskServiceImpl implements ReleaseTaskService {
   private DSLContext jooq;
   private ReleaseTaskDAO releaseTaskDAO;
   private ConditionParser conditionParser;
-  private MailPerform mailPerform;
+//  private MailPerform mailPerform;
+  private DingPerform dingPerform;
 
   @Inject
-  public ReleaseTaskServiceImpl(DSLContext jooq, ReleaseTaskDAO releaseTaskDAO, ConditionParser conditionParser, MailPerform mailPerform) {
+  public ReleaseTaskServiceImpl(DSLContext jooq, ReleaseTaskDAO releaseTaskDAO, ConditionParser conditionParser, DingPerform dingPerform) {
     this.jooq = jooq;
     this.releaseTaskDAO = releaseTaskDAO;
     this.conditionParser = conditionParser;
-    this.mailPerform = mailPerform;
+    this.dingPerform=dingPerform;
   }
 
   public boolean createNewTask(int releaseType, String proposal, String title, String projectURL, String projectDescription, String tag) throws Exception {
@@ -53,7 +54,8 @@ public class ReleaseTaskServiceImpl implements ReleaseTaskService {
       releaseTaskRecord.setTag(tag);
       boolean resultCreateNewTask = releaseTaskDAO.doCreate(releaseTaskRecord, configuration);
       if (resultCreateNewTask) {
-        mailPerform.sendMail();
+//        mailPerform.sendMail();
+        dingPerform.sendDing(proposal,releaseType);
         return true;
       } else {
         throw new RuntimeException("create failed");
