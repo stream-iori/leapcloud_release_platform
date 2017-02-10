@@ -56,6 +56,8 @@ public class GuiceModule implements Module {
     binder.bind(ConditionParser.class);
 
     binder.bind(SQLConditionCombine.class);
+
+
   }
 
   @Provides

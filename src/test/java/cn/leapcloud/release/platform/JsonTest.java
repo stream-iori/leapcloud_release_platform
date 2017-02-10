@@ -125,5 +125,23 @@ public class JsonTest {
 
 
   }
+
+
+
+
+//  @Test
+//  public void testDing(TestContext context) {
+//    Async async = context.async();
+//    DingPerform dingPerform = new DingPerform(vertx);
+//    dingPerform.sendDing("hello",2);
+//
+//    try {
+//      Thread.sleep(3000);
+//    } catch (InterruptedException e) {
+//      e.printStackTrace();
+//    }
+//
+//    async.complete();
+//  }
 }
 

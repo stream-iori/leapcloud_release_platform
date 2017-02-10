@@ -3,6 +3,7 @@ package cn.leapcloud.release.platform.controller;
 import cn.leapcloud.release.platform.service.ReleaseTaskService;
 import cn.leapcloud.release.platform.service.UserService;
 import cn.leapcloud.release.platform.service.domain.ReleaseTask;
+import cn.leapcloud.release.platform.service.domain.User;
 import com.google.common.base.Strings;
 import io.vertx.core.http.HttpServerResponse;
 import io.vertx.core.json.JsonArray;
@@ -36,6 +37,16 @@ public class UserController {
   }
 
   private void initRouter() {
+    router.get("/api/users").handler(routingContext -> {
+      List<User> allUsers = userService.findAll();
+      JsonArray jsonArray = new JsonArray();
+      for (User user : allUsers) {
+        jsonArray.add(user.toJson());
+      }
+      routingContext.response().setStatusCode(200).end(jsonArray.encode());
+    });
+
+
     router.get("/api/isLogin").handler(routingContext -> {
       JsonObject userInfo = routingContext.session().get("userInfo");
       if (userInfo == null || userInfo.getString("name") == null) {
@@ -75,8 +86,13 @@ public class UserController {
         }
 
 
-        boolean result = userService.login(username, password);
+        if (!userService.isPasswordExist(username)) {
+          response.setStatusCode(400).setStatusMessage("administer only").end();
+          return;
+        }
 
+
+        boolean result = userService.login(username, password);
 
         if (result) {
           //3. 设置session

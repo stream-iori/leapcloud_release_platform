@@ -16,10 +16,10 @@ public class MailPerform {
   private UserService service;
 
   @Inject
-  public MailPerform(Vertx vertx, JsonObject config,UserService userService) {
+  public MailPerform(Vertx vertx, JsonObject config, UserService userService) {
     this.vertx = vertx;
     mailObject = config.getJsonObject("mail");
-    this.service= userService;
+    this.service = userService;
 
   }
 
@@ -39,7 +39,7 @@ public class MailPerform {
 
     MailMessage mailMessage = new MailMessage();
     mailMessage.setFrom(mailObject.getString("username"));
-    mailMessage.setTo(service.find().getEmail());
+//    mailMessage.setTo(service.find().getClass());
     mailMessage.setSubject("待发布项目");
     mailMessage.setHtml("this is html text <a href='http://10.10.10.196'>点我</a>");
 

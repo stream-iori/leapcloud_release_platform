@@ -12,6 +12,10 @@ import java.util.stream.Collectors;
  */
 public class SQLConditionCombine {
 
+  public SQLConditionCombine() {
+    
+  }
+
   private <R extends Record> Condition matchCondition(ConditionParser.SQLCondition sqlCondition, TableImpl<R> table) {
 
 

@@ -7,18 +7,12 @@ package cn.leapcloud.release.platform.dao.entity.tables;
 import cn.leapcloud.release.platform.dao.entity.Keys;
 import cn.leapcloud.release.platform.dao.entity.LeapcloudReleasePlatform;
 import cn.leapcloud.release.platform.dao.entity.tables.records.UserRecord;
-
-import java.util.Arrays;
-import java.util.List;
+import org.jooq.*;
+import org.jooq.impl.TableImpl;
 
 import javax.annotation.Generated;
-
-import org.jooq.Field;
-import org.jooq.Identity;
-import org.jooq.Table;
-import org.jooq.TableField;
-import org.jooq.UniqueKey;
-import org.jooq.impl.TableImpl;
+import java.util.Arrays;
+import java.util.List;
 
 
 /**
@@ -34,7 +28,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class User extends TableImpl<UserRecord> {
 
-	private static final long serialVersionUID = -1520429272;
+	private static final long serialVersionUID = -983697610;
 
 	/**
 	 * The reference instance of <code>leapcloud_release_platform.user</code>
@@ -68,6 +62,11 @@ public class User extends TableImpl<UserRecord> {
 	 * The column <code>leapcloud_release_platform.user.password</code>.
 	 */
 	public final TableField<UserRecord, String> PASSWORD = createField("password", org.jooq.impl.SQLDataType.VARCHAR.length(32), this, "");
+
+	/**
+	 * The column <code>leapcloud_release_platform.user.ddid</code>.
+	 */
+	public final TableField<UserRecord, String> DDID = createField("ddid", org.jooq.impl.SQLDataType.VARCHAR.length(50), this, "");
 
 	/**
 	 * Create a <code>leapcloud_release_platform.user</code> table reference

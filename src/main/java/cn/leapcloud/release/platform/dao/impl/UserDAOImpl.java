@@ -7,6 +7,7 @@ import org.jooq.DSLContext;
 import org.jooq.impl.DSL;
 
 import javax.inject.Inject;
+import java.util.List;
 
 import static cn.leapcloud.release.platform.dao.entity.tables.User.USER;
 
@@ -36,8 +37,8 @@ public class UserDAOImpl implements UserDAO {
     return effectRow > 0;
   }
 
-  public UserRecord query() throws RuntimeException {
-    return jooq.selectFrom(USER).fetchOne();
+  public List<UserRecord> query() throws RuntimeException {
+    return jooq.selectFrom(USER).fetch();
   }
 
   public UserRecord queryByName(String name) {
