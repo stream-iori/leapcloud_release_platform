@@ -16,6 +16,7 @@ import java.util.Date;
 /**
  * Created by stream on 05/12/2016.
  */
+
 @RunWith(VertxUnitRunner.class)
 public class UserControllerTest extends Base {
 

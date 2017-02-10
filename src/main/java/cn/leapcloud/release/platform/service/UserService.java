@@ -2,6 +2,8 @@ package cn.leapcloud.release.platform.service;
 
 import cn.leapcloud.release.platform.service.domain.User;
 
+import java.util.List;
+
 /**
  * Created by stream.
  */
@@ -10,7 +12,7 @@ public interface UserService {
 
   boolean modifyUser(User user) throws Exception;
 
-  User find() throws RuntimeException;
+  List<User> findAll() throws RuntimeException;
 
   /**
    * 登录
@@ -23,5 +25,7 @@ public interface UserService {
 
 
   boolean isUserExist(String username) throws RuntimeException;
+
+  boolean isPasswordExist(String username) throws RuntimeException;
 
 }

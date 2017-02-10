@@ -7,6 +7,8 @@ import cn.leapcloud.release.platform.service.domain.User;
 import org.jooq.DSLContext;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
 
 import static cn.leapcloud.release.platform.dao.entity.tables.User.USER;
 
@@ -14,6 +16,7 @@ import static cn.leapcloud.release.platform.dao.entity.tables.User.USER;
  * Created by songqian on 16/11/25.
  */
 public class UserServiceImpl implements UserService {
+
   private DSLContext jooq;
   private UserDAO userDAO;
 
@@ -52,15 +55,31 @@ public class UserServiceImpl implements UserService {
     });
   }
 
-  public User find() throws RuntimeException {
-    UserRecord userRecord = userDAO.query();
-    return userConvert(userRecord);
+  public List<User> findAll() throws RuntimeException {
+
+    List<UserRecord> userRecords = userDAO.query();
+    List<User> users = new ArrayList<>();
+    for (UserRecord userRecord : userRecords) {
+      User user = userConvert(userRecord);
+      users.add(user);
+    }
+    return users;
   }
 
   @Override
   public boolean isUserExist(String username) throws RuntimeException {
     UserRecord userRecord = userDAO.queryByName(username);
     if (userRecord != null) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  @Override
+  public boolean isPasswordExist(String username) throws RuntimeException {
+    UserRecord userRecord = userDAO.queryByName(username);
+    if (userRecord.getPassword() != null) {
       return true;
     } else {
       return false;
@@ -81,7 +100,7 @@ public class UserServiceImpl implements UserService {
     User user = null;
     if (userRecord != null) {
       user = new User.Builder().id(userRecord.getId()).name(userRecord.getName()).email(userRecord.getMail())
-                     .ddId(userRecord.getDdid()).build();
+        .ddId(userRecord.getDdid()).build();
     }
     return user;
   }

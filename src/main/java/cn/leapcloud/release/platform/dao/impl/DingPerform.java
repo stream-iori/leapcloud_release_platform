@@ -64,7 +64,7 @@ public class DingPerform {
     getTokenFuture.compose(token -> {
       Future<Boolean> future = Future.future();
       String str1 = "/message/send?access_token=" + token;
-      String ddId = userService.find().getDdId();
+      String ddId = userService.findAll().get(0).getDdId();
 
       Timestamp timestamp = new Timestamp(System.currentTimeMillis());
       String dingMessage = timestamp.toString().substring(0, timestamp.toString().length() - 4) + proposal + "在" + releaseTypeName + "有任务需要发布";

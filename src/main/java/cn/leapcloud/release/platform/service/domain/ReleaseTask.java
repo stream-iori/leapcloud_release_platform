@@ -81,7 +81,6 @@ public class ReleaseTask {
     return jsonObject;
   }
 
-  @Override
   public String toString() {
     return "ReleaseTask{" +
       "id=" + id +

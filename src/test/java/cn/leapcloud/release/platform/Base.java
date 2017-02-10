@@ -14,10 +14,11 @@ public class Base {
   private static final Logger logger = LoggerFactory.getLogger(Base.class);
   protected static Vertx vertx = Vertx.vertx();
   private static String deploymentID;
+  protected static Starter starter = new Starter();
 
   public static void startServer() throws InterruptedException {
     CountDownLatch countDownLatch = new CountDownLatch(1);
-    vertx.deployVerticle(new Starter(), event -> {
+    vertx.deployVerticle(starter, event -> {
       if (event.succeeded()) {
         deploymentID = event.result();
         logger.info("deploy release-platform success");

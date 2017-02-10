@@ -3,6 +3,8 @@ package cn.leapcloud.release.platform.dao;
 import cn.leapcloud.release.platform.dao.entity.tables.records.UserRecord;
 import org.jooq.Configuration;
 
+import java.util.List;
+
 /**
  * Created by stream.
  */
@@ -12,7 +14,7 @@ public interface UserDAO {
 
   boolean doUpdate(UserRecord userRecord, Configuration configuration) throws Exception;
 
-  UserRecord query() throws RuntimeException;
+  List<UserRecord> query() throws RuntimeException;
 
   UserRecord queryByName(String name);
 

@@ -1,5 +1,7 @@
 package cn.leapcloud.release.platform.service.domain;
 
+import io.vertx.core.json.JsonObject;
+
 /**
  * Created by stream.
  */
@@ -25,6 +27,16 @@ public class User {
   public String getDdId() {
     return ddId;
   }
+
+  public JsonObject toJson() {
+    JsonObject jsonObject = new JsonObject();
+    jsonObject.put("id", id);
+    jsonObject.put("name", name);
+    jsonObject.put("email", email);
+    jsonObject.put("ddId", ddId);
+    return jsonObject;
+  }
+
 
   @Override
   public String toString() {
@@ -58,7 +70,7 @@ public class User {
     }
 
     public Builder ddId(String ddId) {
-      this.ddId=ddId;
+      this.ddId = ddId;
       return this;
     }
 

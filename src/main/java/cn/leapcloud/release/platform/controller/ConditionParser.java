@@ -16,6 +16,10 @@ import static cn.leapcloud.release.platform.controller.ConditionParser.SQLOperat
  */
 public class ConditionParser {
 
+  public ConditionParser(){
+
+  }
+
   public SQLCondition getSQLCondition(JsonObject op) {
     String alias = op.fieldNames().iterator().next();
     Object value = op.getValue(alias);

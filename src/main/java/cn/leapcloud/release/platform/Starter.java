@@ -16,14 +16,21 @@ public class Starter extends AbstractVerticle {
 
   private static final Logger logger = LoggerFactory.getLogger(Starter.class);
   private RestfulServer restfulServer;
+  private Injector injector;
+
+  public Injector getInjector() {
+    return injector;
+  }
 
   @Override
   public void start() throws Exception {
     JsonObject config = vertx.fileSystem().readFileBlocking("./config.json").toJsonObject();
-    Injector injector = Guice.createInjector(new GuiceModule(vertx, config));
+    injector = Guice.createInjector(new GuiceModule(vertx, config));
     restfulServer = injector.getInstance(RestfulServer.class);
     restfulServer.start();
   }
+
+
 
   public void stop() throws Exception {
     restfulServer.stop();
